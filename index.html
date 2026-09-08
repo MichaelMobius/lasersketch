@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Barlow:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=Comfortaa:wght@400;700&family=Cormorant+Garamond:wght@400;700&family=DM+Sans:wght@400;700&family=Fira+Sans:wght@400;700&family=IBM+Plex+Sans:wght@400;700&family=Inter:wght@400;700&family=Lato:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Lora:wght@400;700&family=Montserrat:wght@400;700&family=Noto+Sans:wght@400;700&family=Open+Sans:wght@400;700&family=Oswald:wght@400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@400;700&family=Raleway:wght@400;700&family=Roboto:wght@400;700&family=Roboto+Mono:wght@400;700&family=Space+Grotesk:wght@400;700&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
-<title>LaserSketch CAD 0.70 — Croquis 2D para corte láser</title>
+<title>LaserSketch CAD 0.73 — Croquis 2D para corte láser</title>
 <style>
 
 :root{
@@ -266,12 +266,61 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
 /* 0.70 — backends reales, offset vectorial y texto a contornos */
 .engine-card{display:grid;gap:7px}.engine-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 8px;border:1px solid #d8e4eb;border-radius:7px;background:#fff}.engine-row strong{font-size:12px;color:#274d63}.backend-status{font-size:11px;padding:3px 7px;border-radius:999px;background:#eef3f6;color:#536979;border:1px solid #d6e0e6;white-space:nowrap}.backend-status.ready{background:#e9f7ef;color:#286744;border-color:#b8dec7}.backend-status.loading{background:#fff7df;color:#735800;border-color:#e7d18a}.backend-status.fallback{background:#f7f0ff;color:#674289;border-color:#d9c6ed}.backend-status.error{background:#fff0f2;color:#9b2e43;border-color:#e9bdc6}.curve-quality{display:grid;grid-template-columns:minmax(0,1fr) 86px;gap:7px;align-items:center;margin-top:7px}.outline-action{display:grid;gap:6px;margin-top:8px}.outline-action button{width:100%}.engine-note{font-size:11px;line-height:1.45;color:#637785}.curve-badge{display:inline-block;padding:2px 6px;border-radius:999px;background:#f1e9fb;color:#673c91;border:1px solid #dac6ef;font-size:10px}.font-engine-status{font-size:11px;color:#607482;margin-top:5px}.manufacturing-overlay path.vector-offset{stroke:#8c3ec1;stroke-dasharray:none;stroke-width:1.35}.manufacturing-overlay path.vector-offset.bezier-offset{stroke:#a047b8}.solver-pill.wasm{background:#e7f7ee;color:#236b43}.solver-pill.hybrid{background:#fff3dc;color:#775800}.solver-pill.fallback{background:#f2edfb;color:#694a89}
 
+
+/* 0.71 — texto orientado a fabricación */
+.text-view-row{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stencil-box{margin-top:8px;padding:9px;border:1px solid #d9e3e9;border-radius:8px;background:#f9fbfc}
+.font-preview.outline-preview{color:transparent;-webkit-text-stroke:1px #2879b9;text-stroke:1px #2879b9}
+.font-preview.fill-outline-preview{color:rgba(40,121,185,.16);-webkit-text-stroke:1px #2879b9;text-stroke:1px #2879b9}
+.font-preview.fill-preview{color:#2879b9;-webkit-text-stroke:0 transparent;text-stroke:0 transparent}
+.stencil-badge{display:inline-block;padding:2px 6px;border-radius:999px;background:#fff2df;color:#81550a;border:1px solid #e6c98f;font-size:10px}
+
+
+/* 0.72 — centros, alineación e intersecciones */
+.shape-center-pick circle{fill:#fff;stroke:#176f9c;stroke-width:1.2}
+.shape-center-pick line{stroke:#176f9c;stroke-width:1.1;vector-effect:non-scaling-stroke;pointer-events:none}
+.shape-center-pick:hover circle{fill:#e3f4fb;stroke:#0089bd}
+.align-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.align-grid button{min-width:0;padding:7px 4px;font-size:12px}
+.center-relation-note{padding:7px 8px;margin-top:7px;border:1px solid #cfe1ea;border-radius:7px;background:#f5fbfd;color:#496778;font-size:12px;line-height:1.45}
+.intersection-legend{display:inline-flex;align-items:center;gap:5px}
+.intersection-dot{width:10px;height:10px;border:2px solid #15976e;transform:rotate(45deg);background:#fff}
+
+
+/* 0.73 — estado de definición tipo croquis mecánico */
+:root{--fully-defined:#18a558;--fully-defined-dark:#0d7a3b;--under-defined:#334155}
+.definition-legend{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px
+}
+.definition-state{
+  display:flex;align-items:center;gap:7px;padding:7px 8px;border:1px solid #d8e1e7;
+  border-radius:7px;background:#fbfcfd;color:#4d6272;font-size:11px
+}
+.definition-swatch{width:18px;height:4px;border-radius:99px;background:#334155}
+.definition-swatch.full{background:var(--fully-defined)}
+.definition-badge{
+  display:inline-flex;align-items:center;gap:5px;margin-top:7px;padding:4px 8px;
+  border:1px solid #a9ddbd;border-radius:999px;background:#effbf3;color:#126638;
+  font-size:11px;font-weight:750
+}
+.definition-badge.under{
+  border-color:#d7e0e6;background:#f7f9fb;color:#5c6f7d
+}
+.move-handle.center.locked circle{
+  fill:#dcfce7 !important;stroke:var(--fully-defined) !important
+}
+.move-handle.center.locked text{fill:var(--fully-defined-dark) !important}
+.shape-center-pick.fully-defined circle{
+  fill:#ecfdf3;stroke:var(--fully-defined)
+}
+.shape-center-pick.fully-defined line{stroke:var(--fully-defined)}
+
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brand"><span>LaserSketch</span><small>CAD</small><b>0.70</b></div>
+    <div class="brand"><span>LaserSketch</span><small>CAD</small><b>0.73</b></div>
 <div class="file-actions">    
     <button id="undoBtn" title="Deshacer · Ctrl+Z" aria-label="Deshacer">↶</button>
     <button id="redoBtn" title="Rehacer · Ctrl+Shift+Z" aria-label="Rehacer">↷</button>
@@ -380,9 +429,23 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
               <select id="textAlign"><option value="start">Izquierda</option><option value="middle">Centro</option><option value="end">Derecha</option></select>
             </div>
           </div>
+          <div class="text-view-row">
+            <div>
+              <label class="small">Visualización</label>
+              <select id="textDisplayMode">
+                <option value="outline" selected>Solo contorno</option>
+                <option value="fill">Relleno</option>
+                <option value="fill-outline">Relleno + contorno</option>
+              </select>
+            </div>
+            <div>
+              <label class="small">Puente stencil (mm)</label>
+              <input id="stencilBridgeWidth" type="number" min="0.2" step="0.1" value="1.2">
+            </div>
+          </div>
         </div>
         <div id="fontPreview" class="font-preview">LASER</div>
-        <p class="small">Elige la tipografía, activa <b>Texto</b> y haz clic en el croquis para colocarlo.</p>
+        <p class="small">El texto nuevo se muestra <b>solo como contorno</b> por defecto. Luego puedes convertirlo a líneas/Bézier reales o crear una versión stencil.</p>
         <div class="text-warning">Para corte portátil, selecciona el texto y conviértelo a contornos Bézier. Mientras siga siendo texto, SVG/DXF dependen de la fuente disponible.</div>
       </section>
 
@@ -520,7 +583,7 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
   function newLine(a,b,layer="cut",meta={}){const e={id:"e"+state.nextEntity++,type:"line",a:a.id,b:b.id,layer,...meta};state.entities.push(e);return e}
   function newCircle(c,r,layer="cut",meta={}){const e={id:"e"+state.nextEntity++,type:"circle",c:c.id,r,layer,...meta};state.entities.push(e);return e}
   function newArc(a,b,cx,cy,r,sweep=1,layer="cut",meta={}){const e={id:"e"+state.nextEntity++,type:"arc",a:a.id,b:b.id,cx,cy,r,sweep,layer,...meta};state.entities.push(e);return e}
-  function newText(c,text,font,size,rotation,align,weight,layer="engrave",meta={}){const e={id:"e"+state.nextEntity++,type:"text",c:c.id,text,font,size,rotation,align,weight,layer,...meta};state.entities.push(e);return e}
+  function newText(c,text,font,size,rotation,align,weight,layer="engrave",meta={}){const e={id:"e"+state.nextEntity++,type:"text",c:c.id,text,font,size,rotation,align,weight,displayMode:meta.displayMode||"outline",layer,...meta};state.entities.push(e);return e}
   function newConstraint(type,data={}){const c={id:"c"+state.nextConstraint++,type,...data};state.constraints.push(c);return c}
 
   function snapshot(){return JSON.stringify({points:state.points,entities:state.entities,constraints:state.constraints,nextPoint:state.nextPoint,nextEntity:state.nextEntity,nextConstraint:state.nextConstraint})}
@@ -692,9 +755,10 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     const desc=movableSelectionDescriptor();
     if(desc){
       const r=handleR()*1.65;
-      const g=svgEl("g",{class:"move-handle center"});
+      const locked=typeof descriptorFullyDefined073==="function"&&descriptorFullyDefined073(desc);
+      const g=svgEl("g",{class:"move-handle center"+(locked?" locked":"")});
       const c=svgEl("circle",{cx:desc.center.x,cy:desc.center.y,r, "vector-effect":"non-scaling-stroke","stroke-width":.7});
-      c.style.cursor="move";
+      c.style.cursor=locked?"not-allowed":"move";
       c.addEventListener("pointerdown",ev=>{
         if(state.tool!=="select")return;
         ev.stopPropagation();
@@ -716,8 +780,9 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
   }
   function renderEntity(e){
     const selected=state.selection.kind==="entity"&&state.selection.ids.includes(e.id);
-    const stroke=selected?"#0077b6":layerStroke[e.layer]||"#334155";
-    const base={fill:"none",stroke,"stroke-width":selected?1.6:1.15,"vector-effect":"non-scaling-stroke","data-eid":e.id,...(e.layer==="construction"?{"stroke-dasharray":"3 2"}:{})};
+    const fully=typeof isEntityFullyDefined073==="function"&&isEntityFullyDefined073(e.id);
+    const stroke=fully?(selected?"#0d7a3b":"#18a558"):(selected?"#0077b6":layerStroke[e.layer]||"#334155");
+    const base={fill:"none",stroke,"stroke-width":selected?1.75:1.15,"vector-effect":"non-scaling-stroke","data-eid":e.id,...(e.layer==="construction"?{"stroke-dasharray":"3 2"}:{})};
     let el=null;
     if(e.type==="line"){
       const a=pBy(e.a),b=pBy(e.b);if(!a||!b)return;
@@ -730,13 +795,14 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     }else if(e.type==="bezier"){el=svgEl("path",{...base,d:bezierPath(e)});
     }else if(e.type==="text"){
       const c=pBy(e.c);if(!c)return;
-      el=svgEl("text",{
-        x:c.x,y:c.y,fill:selected?"#0077b6":layerStroke[e.layer]||"#2879b9",
-        stroke:"none","font-family":e.font||"Roboto","font-size":e.size||10,
+      const ink=selected?"#0077b6":layerStroke[e.layer]||"#2879b9",mode=e.displayMode||"outline";
+      const attrs={x:c.x,y:c.y,"font-family":e.font||"Roboto","font-size":e.size||10,
         "font-weight":e.weight||400,"text-anchor":e.align||"start",
-        transform:`rotate(${e.rotation||0} ${c.x} ${c.y})`,"data-eid":e.id
-      });
-      el.textContent=e.text||"Texto";
+        transform:`rotate(${e.rotation||0} ${c.x} ${c.y})`,"data-eid":e.id,"paint-order":"stroke fill"};
+      if(mode==="fill"){attrs.fill=ink;attrs.stroke="none"}
+      else if(mode==="fill-outline"){attrs.fill=ink;attrs["fill-opacity"]=selected?.20:.14;attrs.stroke=ink;attrs["stroke-width"]=selected?1.2:.65;attrs["vector-effect"]="non-scaling-stroke"}
+      else{attrs.fill="none";attrs.stroke=ink;attrs["stroke-width"]=selected?1.35:.75;attrs["vector-effect"]="non-scaling-stroke"}
+      el=svgEl("text",attrs);el.textContent=e.text||"Texto";
     }
     if(!el)return;
     el.style.cursor=state.tool==="trim"?"crosshair":"pointer";
@@ -758,8 +824,12 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     for(const p of state.points){
       if(!state.entities.some(e=>entityPointIds(e).includes(p.id)))continue;
       const selected=state.selection.kind==="point"&&state.selection.ids.includes(p.id);
-      const el=svgEl("circle",{cx:p.x,cy:p.y,r:selected?r*1.45:r,fill:selected?"#0b78b5":"#ffffff",stroke:selected?"#075f90":"#526171","stroke-width":selected?.8:.42,"vector-effect":"non-scaling-stroke"});
-      el.style.cursor="move";
+      const fixed=typeof isPointFullyDefined073==="function"&&isPointFullyDefined073(p.id);
+      const el=svgEl("circle",{cx:p.x,cy:p.y,r:selected?r*1.45:r,
+        fill:fixed?(selected?"#b7f0cc":"#ecfdf3"):(selected?"#0b78b5":"#ffffff"),
+        stroke:fixed?"#18a558":(selected?"#075f90":"#526171"),
+        "stroke-width":selected?.9:.52,"vector-effect":"non-scaling-stroke"});
+      el.style.cursor=fixed?"not-allowed":"move";
       el.addEventListener("pointerdown",ev=>{
         if(state.tool!=="select")return;
         ev.stopPropagation();
@@ -1292,6 +1362,9 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
         makeNumberField(body,"Y",c.y,"mm",v=>{c.y=v},"0.1");
         makeSelectField(body,"Peso",String(e.weight||400),[{value:"400",label:"Regular"},{value:"700",label:"Bold"}],v=>{e.weight=Number(v)});
         makeSelectField(body,"Alineación",e.align||"start",[{value:"start",label:"Izquierda"},{value:"middle",label:"Centro"},{value:"end",label:"Derecha"}],v=>{e.align=v});
+        makeSelectField(body,"Visualización",e.displayMode||"outline",[
+          {value:"outline",label:"Solo contorno"},{value:"fill",label:"Relleno"},{value:"fill-outline",label:"Relleno + contorno"}
+        ],v=>{e.displayMode=v});
       }
       addLayerControl(body,[e]);
       const n=document.createElement("div");n.className="quick-note";n.innerHTML="<strong>Consejo:</strong> puedes mover la entidad arrastrando su asa central ✥. Los cambios numéricos se aplican al pulsar Enter o al salir del campo.";body.appendChild(n)
@@ -1351,8 +1424,9 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     const rotation=Number($("textRotation").value)||0;
     const align=$("textAlign").value||"start";
     const weight=Number($("textWeight").value)||400;
+    const displayMode=$("textDisplayMode")?.value||"outline";
     const layer=$("activeLayer").value||"engrave";
-    const e=newText(anchor,raw,font,size,rotation,align,weight,layer);
+    const e=newText(anchor,raw,font,size,rotation,align,weight,layer,{displayMode});
     state.selection={kind:"entity",ids:[e.id]};
     render();
     msg(`Texto colocado con ${font}. Selecciónalo para editar sus propiedades.`);
@@ -1622,8 +1696,11 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     p.style.fontWeight=String(weight);
     p.style.fontSize=`${Math.max(16,Math.min(34,size*2))}px`;
     p.style.transform=`rotate(${clamp(rotation,-8,8)}deg)`;
+    const mode=$("textDisplayMode")?.value||"outline";
+    p.classList.remove("outline-preview","fill-preview","fill-outline-preview");
+    p.classList.add(mode==="fill"?"fill-preview":mode==="fill-outline"?"fill-outline-preview":"outline-preview");
   }
-  ["textFont","textContent","textSize","textWeight","textRotation"].forEach(id=>{
+  ["textFont","textContent","textSize","textWeight","textRotation","textDisplayMode"].forEach(id=>{
     $(id).addEventListener(id==="textContent"?"input":"change",updateFontPreview);
     if(id==="textSize"||id==="textRotation")$(id).addEventListener("input",updateFontPreview);
   });
@@ -1829,7 +1906,7 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
 
   function buildUI(){
     const left=$('leftPanel'),sections=[...left.children];left.innerHTML='';
-    const precision=document.createElement('section');precision.className='section';precision.innerHTML='<h3>Asistencias de dibujo</h3><label class="toggle-row"><input id="objectSnap" type="checkbox" checked> Vértices, centros y puntos medios</label><label class="toggle-row"><input id="gridSnap" type="checkbox" checked> Ajustar a cuadrícula</label><div class="field"><label for="gridStep">Paso · mm</label><input id="gridStep" type="number" min="0.001" step="0.1" value="0.5"></div><div class="field"><label for="polygonSides">Lados del polígono</label><input id="polygonSides" type="number" min="3" max="128" value="6"></div><p class="small">Shift: horizontal / vertical<br>Rueda: zoom · Alt + arrastre: mover vista</p>';left.appendChild(precision);
+    const precision=document.createElement('section');precision.className='section';precision.innerHTML='<h3>Asistencias de dibujo</h3><label class="toggle-row"><input id="objectSnap" type="checkbox" checked> Vértices, centros, puntos medios e intersecciones</label><label class="toggle-row"><input id="gridSnap" type="checkbox" checked> Ajustar a cuadrícula</label><div class="field"><label for="gridStep">Paso · mm</label><input id="gridStep" type="number" min="0.001" step="0.1" value="0.5"></div><div class="field"><label for="polygonSides">Lados del polígono</label><input id="polygonSides" type="number" min="3" max="128" value="6"></div><p class="small">Shift: horizontal / vertical<br>Rueda: zoom · Alt + arrastre: mover vista</p>';left.appendChild(precision);
     sections.forEach((section,i)=>{const d=document.createElement('details'),s=document.createElement('summary');s.textContent=section.querySelector('h3')?.textContent||'Opciones';section.querySelector('h3')?.remove();d.append(s,section);d.open=[0,1,2].includes(i);if(i===5)d.dataset.section='text';left.appendChild(d)});
     // Added constraints are directional relations of two lines.
     const rel=$('horizontalBtn').parentElement;for(const [id,label] of [['parallel','Paralelas'],['perpendicular','Perpendiculares']]){const b=document.createElement('button');b.textContent=label;b.className='secondary';b.onclick=()=>{const es=selE();if(es.length!==2||es.some(e=>e.type!=='line')){msg('Selecciona dos líneas con Shift.','warn');return}pushHistory();newConstraint('angle',{entityA:es[0].id,entityB:es[1].id,value:id==='parallel'?0:90});solve(30);render();msg(label+' aplicadas.')};rel.appendChild(b)}
@@ -1875,12 +1952,19 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
   function fitGeometry(){const bounds=modelBounds(),rect=canvas.getBoundingClientRect(),W=rect.width||1000,H=rect.height||600,left=$('mainLayout').classList.contains('left-collapsed')?0:$('leftPanel').getBoundingClientRect().width,right=$('mainLayout').classList.contains('right-collapsed')?0:$('rightPanel').getBoundingClientRect().width,avail=Math.max(160,W-left-right-110),scale=Math.min(avail/(bounds.w+16),Math.max(150,H-150)/(bounds.h+16));state.view.w=W/scale;state.view.h=H/scale;state.view.x=bounds.x+bounds.w/2-(left+(W-left-right)/2)/scale;state.view.y=bounds.y+bounds.h/2-H/2/scale;render()}
   rebind('fitBtn',fitGeometry);
   rebind('exactRectBtn',()=>{try{const w=numberExpression($('exactW').value),h=numberExpression($('exactH').value);if(w<=0||h<=0)throw Error('Ancho y alto deben ser positivos');pushHistory();const es=addRectangle(0,0,w,h,$('activeLayer').value);state.selection={kind:'entity',ids:es.map(e=>e.id)};solve();render();fitGeometry();msg('Rectángulo '+w+' × '+h+' mm creado.')}catch(err){msg(err.message,'bad')}});
+  function svgTextStyle(e,stroke){
+    const mode=e.displayMode||"outline";
+    if(mode==="fill")return `fill="${stroke}" stroke="none"`;
+    if(mode==="fill-outline")return `fill="${stroke}" fill-opacity="0.14" stroke="${stroke}" stroke-width="0.1"`;
+    return `fill="none" stroke="${stroke}" stroke-width="0.1"`;
+  }
+
   function exportSVG(){validateGeometry();const b=modelBounds(true),m=2;let body='';for(const e of state.entities){if(e.layer==='construction')continue;const stroke=layerStroke[e.layer]||layerStroke.cut,base=`fill="none" stroke="${stroke}" stroke-width="0.1"`;
     if(e.type==='line'){const a=pBy(e.a),c=pBy(e.b);body+=`<line x1="${a.x}" y1="${a.y}" x2="${c.x}" y2="${c.y}" ${base}/>`}
     if(e.type==='circle'){const c=pBy(e.c);body+=`<circle cx="${c.x}" cy="${c.y}" r="${e.r}" ${base}/>`}
     if(e.type==='arc'){const i=arcInfo(e);body+=`<path d="M ${i.a.x} ${i.a.y} A ${e.r} ${e.r} 0 ${i.large?1:0} ${e.sweep?1:0} ${i.b.x} ${i.b.y}" ${base}/>`}
     if(e.type==='bezier')body+=`<path d="${bezierPath(e)}" ${base}/>`;
-    if(e.type==='text'){const c=pBy(e.c);body+=`<text x="${c.x}" y="${c.y}" fill="${stroke}" font-family="${escapeXML(e.font||'sans-serif')}" font-size="${e.size}" font-weight="${e.weight||400}" text-anchor="${['start','middle','end'].includes(e.align)?e.align:'start'}" transform="rotate(${e.rotation||0} ${c.x} ${c.y})">${escapeXML(e.text)}</text>`}body+='\n';
+    if(e.type==='text'){const c=pBy(e.c);body+=`<text x="${c.x}" y="${c.y}" ${svgTextStyle(e,stroke)} font-family="${escapeXML(e.font||'sans-serif')}" font-size="${e.size}" font-weight="${e.weight||400}" text-anchor="${['start','middle','end'].includes(e.align)?e.align:'start'}" transform="rotate(${e.rotation||0} ${c.x} ${c.y})">${escapeXML(e.text)}</text>`}body+='\n';
   }return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${b.w+2*m}mm" height="${b.h+2*m}mm" viewBox="${b.x-m} ${b.y-m} ${b.w+2*m} ${b.h+2*m}">\n${body}</svg>`}
   const deg=a=>normAngle(a)*180/Math.PI;
   function exportDXF(){validateGeometry();const o=['0','SECTION','2','HEADER','9','$ACADVER','1','AC1015','9','$INSUNITS','70','4','9','$MEASUREMENT','70','1','0','ENDSEC','0','SECTION','2','ENTITIES'];let handle=256;
@@ -1893,16 +1977,16 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
       if(e.type==='text'){header('TEXT',e,'AcDbText');const c=pBy(e.c),alignment={start:0,middle:1,end:2}[e.align]||0,txt=String(e.text).replace(/[\r\n]+/g,' ').replace(/[^\x20-\x7e]/g,c=>'\\U+'+c.charCodeAt(0).toString(16).toUpperCase().padStart(4,'0'));o.push('10',c.x,'20',-c.y,'30',0,'40',e.size,'1',txt,'50',-(e.rotation||0),'7','STANDARD','72',alignment,'11',c.x,'21',-c.y,'31',0,'100','AcDbText','73',0)}
     }o.push('0','ENDSEC','0','EOF');return o.join('\n')+'\n';
   }
-  function exportCheck(){const issues=[];const ends=[];for(const e of state.entities.filter(e=>e.layer==='cut')){if(['line','arc','bezier'].includes(e.type))ends.push(pBy(e.a),pBy(e.b));if(e.type==='line'&&dist(pBy(e.a),pBy(e.b))<1e-6)issues.push('Hay segmentos de longitud cero.');if(e.type==='text')issues.push('Convierte el texto a contornos en el programa de fabricación.')}const open=ends.filter(p=>ends.filter(q=>dist(p,q)<1e-5).length===1).length;if(open)issues.push(open+' extremos abiertos: revisa si el diseño los necesita.');issues.push(...constraintErrors());return [...new Set(issues)]}
-  function exportFile(type){try{finishOperation();const issues=exportCheck(),content=type==='svg'?exportSVG():exportDXF();download('lasersketch_v070.'+type,content,type==='svg'?'image/svg+xml':'application/dxf');msg(issues.length?issues.join(' '):'Archivo exportado en mm. Verifica escala 1:1 en el programa del láser.',issues.length?'warn':'good')}catch(err){msg('No se exportó: '+err.message,'bad')}}
+  function exportCheck(){const issues=[];const ends=[];for(const e of state.entities.filter(e=>e.layer==='cut')){if(['line','arc','bezier'].includes(e.type))ends.push(pBy(e.a),pBy(e.b));if(e.type==='line'&&dist(pBy(e.a),pBy(e.b))<1e-6)issues.push('Hay segmentos de longitud cero.');if(e.type==='text')issues.push('El texto se ve como contorno, pero sigue siendo tipográfico: conviértelo a contornos antes de fabricar.')}const open=ends.filter(p=>ends.filter(q=>dist(p,q)<1e-5).length===1).length;if(open)issues.push(open+' extremos abiertos: revisa si el diseño los necesita.');issues.push(...constraintErrors());return [...new Set(issues)]}
+  function exportFile(type){try{finishOperation();const issues=exportCheck(),content=type==='svg'?exportSVG():exportDXF();download('lasersketch_v073.'+type,content,type==='svg'?'image/svg+xml':'application/dxf');msg(issues.length?issues.join(' '):'Archivo exportado en mm. Verifica escala 1:1 en el programa del láser.',issues.length?'warn':'good')}catch(err){msg('No se exportó: '+err.message,'bad')}}
   rebind('svgBtn',()=>exportFile('svg'));rebind('dxfBtn',()=>exportFile('dxf'));
   function projectData(){finishOperation();return {format:'LaserSketchCAD',version:'0.60',units:'mm',...geomData(),baseModel,operations,manufacturing:{thickness:Number($('thickness').value),kerf:Number($('kerf').value)}}}
-  rebind('saveBtn',()=>{const data=projectData();download('lasersketch_v070.json',JSON.stringify(data,null,2),'application/json');msg('Proyecto guardado con todas sus operaciones editables.')});
+  rebind('saveBtn',()=>{const data=projectData();download('lasersketch_v073.json',JSON.stringify(data,null,2),'application/json');msg('Proyecto guardado con todas sus operaciones editables.')});
   function normalizeModel(d){const m=clone(d);for(const k of ['points','entities','constraints'])m[k]=m[k]||[];for(const [key,array,prefix] of [['nextPoint','points','p'],['nextEntity','entities','e'],['nextConstraint','constraints','c']])m[key]=Math.max(Number(m[key])||1,...m[array].map(x=>Number(String(x.id).replace(prefix,''))+1||1));return m}
   function loadProject(d){if(d.format&&d.format!=='LaserSketchCAD')throw Error('Este archivo no es un proyecto LaserSketch');if(!Array.isArray(d.points)||!Array.isArray(d.entities)||d.points.length>50000||d.entities.length>20000)throw Error('Formato o tamaño no válido');const backup=snapshot();try{setGeom(normalizeModel(d));validateGeometry();baseModel=d.baseModel?normalizeModel(d.baseModel):geomData();operations=clone(d.operations||[]);if(operations.length>2000)throw Error('El historial es demasiado grande');if(operations.length){const expected=JSON.stringify({points:state.points,entities:state.entities});rebuild();validateGeometry();}if(d.manufacturing){for(const key of ['thickness','kerf'])if(Number.isFinite(d.manufacturing[key]))$(key).value=d.manufacturing[key]}pending=null;selectedOperation=-1;state.selection={kind:null,ids:[]};state.history.push(backup);state.future=[];$('operationEditor').innerHTML='';render();fitGeometry()}catch(err){restore(backup);throw err}}
   const openInput=$('openFile'),newOpen=openInput.cloneNode(true);openInput.replaceWith(newOpen);newOpen.addEventListener('change',async ev=>{const f=ev.target.files[0];if(!f)return;try{if(f.size>20e6)throw Error('El proyecto supera 20 MB');loadProject(JSON.parse(await f.text()));msg('Proyecto abierto con sus operaciones.')}catch(err){msg('No se pudo abrir: '+err.message,'bad')}finally{ev.target.value=''}});
   let readyToSave=false,storedDraft=null;
-  function scheduleSave(){if(!readyToSave)return;clearTimeout(autosaveTimer);autosaveTimer=setTimeout(()=>{try{const json=JSON.stringify(projectData());if(json===lastSave)return;localStorage.setItem('lasersketch-v070-draft',json);lastSave=json}catch(_){$('message').textContent='El navegador no permite autoguardar. Usa Guardar proyecto.'}},650)}
+  function scheduleSave(){if(!readyToSave)return;clearTimeout(autosaveTimer);autosaveTimer=setTimeout(()=>{try{const json=JSON.stringify(projectData());if(json===lastSave)return;localStorage.setItem('lasersketch-v073-draft',json);lastSave=json}catch(_){$('message').textContent='El navegador no permite autoguardar. Usa Guardar proyecto.'}},650)}
 
   // ===================== LaserSketch 0.60 upgrade =====================
   // Simultaneous constraint solving, parameters, profiles and manufacturing.
@@ -2009,7 +2093,7 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
 
   // ---- manufacturing validation ---------------------------------------------
   function canonicalEntity(e){const n=x=>Number(x.toFixed(6));if(e.type==='line'){const A=pBy(e.a),B=pBy(e.b),a=[n(A.x),n(A.y)],b=[n(B.x),n(B.y)];return 'L'+JSON.stringify(a<b?[a,b]:[b,a])}if(e.type==='circle'){const c=pBy(e.c);return 'C'+[n(c.x),n(c.y),n(e.r)].join(',')}if(e.type==='arc')return 'A'+[n(e.cx),n(e.cy),n(e.r),n(pBy(e.a).x),n(pBy(e.a).y),n(pBy(e.b).x),n(pBy(e.b).y),e.sweep].join(',');if(e.type==='bezier')return 'B'+bezierControls(e).flatMap(p=>[n(p.x),n(p.y)]).join(',');return e.type+e.id}
-  function analyzeManufacturing(){const profiles=discoverProfiles('cut'),issues=[],cut=state.entities.filter(e=>e.layer==='cut'),kerf=Math.max(0,Number($('kerf')?.value)||numberExpression('kerf')),seen=new Map(),ends=[];for(const e of cut){const key=canonicalEntity(e);if(seen.has(key))issues.push({severity:'error',text:'Geometría duplicada: '+seen.get(key)+' y '+e.id});else seen.set(key,e.id);if(['line','arc','bezier'].includes(e.type)){ends.push({p:pBy(e.a),eid:e.id},{p:pBy(e.b),eid:e.id})}if(e.type==='line'&&dist(pBy(e.a),pBy(e.b))<1e-6)issues.push({severity:'error',text:'Segmento de longitud cero: '+e.id});if(e.type==='circle'&&2*e.r<Math.max(.5,2*kerf))issues.push({severity:'warn',text:'Agujero pequeño '+e.id+' · Ø'+Number((2*e.r).toFixed(3))+' mm'});if(e.type==='text')issues.push({severity:'warn',text:'Texto de corte sin contornos: '+e.id})}
+  function analyzeManufacturing(){const profiles=discoverProfiles('cut'),issues=[],cut=state.entities.filter(e=>e.layer==='cut'),kerf=Math.max(0,Number($('kerf')?.value)||numberExpression('kerf')),seen=new Map(),ends=[];for(const e of cut){const key=canonicalEntity(e);if(seen.has(key))issues.push({severity:'error',text:'Geometría duplicada: '+seen.get(key)+' y '+e.id});else seen.set(key,e.id);if(['line','arc','bezier'].includes(e.type)){ends.push({p:pBy(e.a),eid:e.id},{p:pBy(e.b),eid:e.id})}if(e.type==='line'&&dist(pBy(e.a),pBy(e.b))<1e-6)issues.push({severity:'error',text:'Segmento de longitud cero: '+e.id});if(e.type==='circle'&&2*e.r<Math.max(.5,2*kerf))issues.push({severity:'warn',text:'Agujero pequeño '+e.id+' · Ø'+Number((2*e.r).toFixed(3))+' mm'});if(e.type==='text')issues.push({severity:'warn',text:'Texto tipográfico sin convertir: '+e.id+' (la vista de contorno no reemplaza la conversión a curvas)'})}
     const gapTol=Math.max(.03,kerf*.75);for(let i=0;i<ends.length;i++)for(let j=i+1;j<ends.length;j++){if(ends[i].p.id===ends[j].p.id)continue;const d=dist(ends[i].p,ends[j].p);if(d>1e-6&&d<gapTol)issues.push({severity:'warn',text:'Micro-gap '+Number(d.toFixed(4))+' mm entre '+ends[i].eid+' y '+ends[j].eid})}
     const icut=cut.filter(e=>['line','circle','arc'].includes(e.type));for(let i=0;i<icut.length;i++)for(let j=i+1;j<icut.length;j++){const a=icut[i],b=icut[j],shared=new Set(entityPointIds(a).filter(id=>entityPointIds(b).includes(id)));const xs=intersections(a,b).filter(q=>![...shared].some(id=>dist(pBy(id),q)<1e-5));if(xs.length)issues.push({severity:'warn',text:'Intersección no recortada entre '+a.id+' y '+b.id})}
     for(const p of profiles)if(!p.closed)issues.push({severity:p.branch?'error':'warn',text:p.branch?'Perfil ramificado '+p.id:'Cadena abierta '+p.id});
@@ -2024,7 +2108,7 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
   function ensureManufacturingLayer(){let g=$('manufacturingLayer');if(!g){g=svgEl('g',{id:'manufacturingLayer',class:'manufacturing-overlay'});canvas.insertBefore(g,pointsLayer)}return g}
   function renderKerfOverlay(){const g=ensureManufacturingLayer();g.innerHTML='';if(!$('kerfView')?.checked)return;const k=Math.max(0,Number($('kerf').value)||0);for(const p of discoverProfiles('cut').filter(p=>p.closed)){const pts=compensatedProfile(p,k);if(pts.length<3)continue;const d='M '+pts.map(q=>q.x+' '+q.y).join(' L ')+' Z';g.appendChild(svgEl('path',{d}))}}
   function svgPathFromPoly(poly){return 'M '+poly.map(p=>p.x+' '+p.y).join(' L ')+' Z'}
-  function exportKerfSVG(){validateGeometry();const a=analyzeManufacturing(),k=Math.max(0,Number($('kerf').value)||0),b=modelBounds(true),m=2;let body='';const profEntities=new Set(a.profiles.filter(p=>p.closed).flatMap(p=>p.entityIds));for(const p of a.profiles.filter(p=>p.closed)){const poly=compensatedProfile(p,k);body+=`<path d="${svgPathFromPoly(poly)}" fill="none" stroke="${layerStroke.cut}" stroke-width="0.1"/>\n`}for(const e of state.entities){if(e.layer==='construction'||profEntities.has(e.id))continue;const stroke=layerStroke[e.layer]||layerStroke.cut;if(e.type==='line'){const x=pBy(e.a),y=pBy(e.b);body+=`<line x1="${x.x}" y1="${x.y}" x2="${y.x}" y2="${y.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='circle'){const c=pBy(e.c);body+=`<circle cx="${c.x}" cy="${c.y}" r="${e.r}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='arc'){const i=arcInfo(e);body+=`<path d="M ${i.a.x} ${i.a.y} A ${e.r} ${e.r} 0 ${i.large?1:0} ${e.sweep?1:0} ${i.b.x} ${i.b.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='bezier')body+=`<path d="${bezierPath(e)}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`;else if(e.type==='text'){const c=pBy(e.c);body+=`<text x="${c.x}" y="${c.y}" fill="${stroke}" font-family="${escapeXML(e.font||'sans-serif')}" font-size="${e.size}">${escapeXML(e.text)}</text>\n`}}return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${b.w+2*m}mm" height="${b.h+2*m}mm" viewBox="${b.x-m} ${b.y-m} ${b.w+2*m} ${b.h+2*m}">\n${body}</svg>`}
+  function exportKerfSVG(){validateGeometry();const a=analyzeManufacturing(),k=Math.max(0,Number($('kerf').value)||0),b=modelBounds(true),m=2;let body='';const profEntities=new Set(a.profiles.filter(p=>p.closed).flatMap(p=>p.entityIds));for(const p of a.profiles.filter(p=>p.closed)){const poly=compensatedProfile(p,k);body+=`<path d="${svgPathFromPoly(poly)}" fill="none" stroke="${layerStroke.cut}" stroke-width="0.1"/>\n`}for(const e of state.entities){if(e.layer==='construction'||profEntities.has(e.id))continue;const stroke=layerStroke[e.layer]||layerStroke.cut;if(e.type==='line'){const x=pBy(e.a),y=pBy(e.b);body+=`<line x1="${x.x}" y1="${x.y}" x2="${y.x}" y2="${y.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='circle'){const c=pBy(e.c);body+=`<circle cx="${c.x}" cy="${c.y}" r="${e.r}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='arc'){const i=arcInfo(e);body+=`<path d="M ${i.a.x} ${i.a.y} A ${e.r} ${e.r} 0 ${i.large?1:0} ${e.sweep?1:0} ${i.b.x} ${i.b.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='bezier')body+=`<path d="${bezierPath(e)}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`;else if(e.type==='text'){const c=pBy(e.c);body+=`<text x="${c.x}" y="${c.y}" ${svgTextStyle(e,stroke)} font-family="${escapeXML(e.font||'sans-serif')}" font-size="${e.size}" font-weight="${e.weight||400}" text-anchor="${['start','middle','end'].includes(e.align)?e.align:'start'}" transform="rotate(${e.rotation||0} ${c.x} ${c.y})">${escapeXML(e.text)}</text>\n`}}return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${b.w+2*m}mm" height="${b.h+2*m}mm" viewBox="${b.x-m} ${b.y-m} ${b.w+2*m} ${b.h+2*m}">\n${body}</svg>`}
 
   // ---- offset/chamfer/press-fit features ------------------------------------
   function createOffsetFeature(){const p=profileForSelection();if(!p){msg('Selecciona una entidad que pertenezca a un perfil cerrado de corte.','warn');return}let d;try{d=numberExpression($('offsetDistance').value)}catch(err){msg(err.message,'bad');return}const poly=offsetByArea(p.poly,Math.abs(d),d>=0);if(poly.length<3){msg('No se pudo calcular el offset.','bad');return}pushHistory();pending.label='Offset de perfil';const P=poly.map(q=>newPoint(q.x,q.y)),ids=[];for(let i=0;i<P.length;i++)ids.push(newLine(P[i],P[(i+1)%P.length],$('activeLayer').value,{primitive:'offset'}).id);state.selection={kind:'entity',ids};render();msg('Offset '+d+' mm creado como perfil fabricable.')}
@@ -2047,7 +2131,7 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     const panel=$('constraintList');if(!panel)return;panel.innerHTML='';const ids=new Set(state.selection.ids);
     const cs=state.constraints.filter(c=>[c.entity,c.entityA,c.entityB,c.p1,c.p2].some(id=>ids.has(id)));
     if(!cs.length){panel.innerHTML='<span class="small">Selecciona geometría para revisar sus cotas y relaciones.</span>';return}
-    const names={horizontal:'Horizontal',vertical:'Vertical',length:'Longitud',diameter:'Diámetro',radius:'Radio',ptdistance:'Distancia',equal:'Iguales',absoluteAngle:'Ángulo',angle:'Ángulo',concentric:'Concéntrico',tangent:'Tangente',equalRadius:'Igual radio',fixedPoint:'Fijo'};
+    const names={horizontal:'Horizontal',vertical:'Vertical',length:'Longitud',diameter:'Diámetro',radius:'Radio',ptdistance:'Distancia',equal:'Iguales',absoluteAngle:'Ángulo',angle:'Ángulo',concentric:'Concéntrico',tangent:'Tangente',equalRadius:'Igual radio',fixedPoint:'Fijo',centerCoincident:'Centros coincidentes'};
     for(const c of cs){const row=document.createElement('div');row.className='row';row.style.marginBottom='6px';const text=document.createElement('span');text.className='small';text.textContent=(names[c.type]||c.type)+(Number.isFinite(c.value)?' · '+Number(c.value.toFixed(6)):'')+(c.expr&&String(c.expr)!==String(c.value)?' · '+c.expr:'');const del=document.createElement('button');del.className='secondary';del.textContent='×';del.style.flex='0 0 32px';del.setAttribute('aria-label','Eliminar relación '+c.id);del.onclick=()=>{pushHistory();state.constraints=state.constraints.filter(x=>x.id!==c.id);solve();render();msg('Relación eliminada.')};row.append(text,del);panel.appendChild(row)}
   };
   function renderManufacturingPanel(){const panel=$('manufacturingPanel');if(!panel)return;const a=analyzeManufacturing();panel.innerHTML='';panel.className='card manufacturing-card '+(a.ok?'manufacturing-pass':'manufacturing-fail');const s=document.createElement('div');s.className='manu-summary';s.innerHTML=`<div class="manu-stat"><strong>${a.closed}</strong><span>perfiles</span></div><div class="manu-stat"><strong>${a.holes}</strong><span>huecos</span></div><div class="manu-stat"><strong>${a.open}</strong><span>abiertos</span></div>`;panel.appendChild(s);if(!a.issues.length){const ok=document.createElement('div');ok.className='issue ok';ok.textContent='Sin errores críticos detectados. Verifica escala 1:1 antes de cortar.';panel.appendChild(ok)}else for(const issue of a.issues.slice(0,8)){const d=document.createElement('div');d.className='issue '+issue.severity;d.textContent=issue.text;panel.appendChild(d)}const list=document.createElement('div');for(const p of a.profiles.filter(p=>p.closed)){const b=document.createElement('button');b.className='profile-row';b.innerHTML=`<span>${p.id} <span class="profile-badge">${p.kind==='hole'?'hueco':'exterior'}</span></span><small>${p.entityIds.length} entidades</small>`;b.onmouseenter=()=>{profileHoverIds=new Set(p.entityIds);applyProfileHover()};b.onmouseleave=()=>{profileHoverIds.clear();applyProfileHover()};b.onclick=()=>{state.selection={kind:'entity',ids:p.entityIds};render()};list.appendChild(b)}panel.appendChild(list)}
@@ -2068,7 +2152,7 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     const laser=document.createElement('details');laser.open=true;laser.innerHTML='<summary>Fabricación paramétrica</summary><section class="section"><div class="laser-toolbox"><div class="field"><label>Plancha W</label><input id="sheetW" type="number" value="600" min="1"></div><div class="field"><label>Plancha H</label><input id="sheetH" type="number" value="400" min="1"></div><label class="toggle-row"><input id="kerfView" type="checkbox"> Vista compensación kerf</label><div class="kerf-legend">Trayectoria de corte compensada</div><hr style="border:0;border-top:1px solid #e2e9ee;margin:10px 0"><div class="field"><label>Ranura · largo</label><input id="slotLength" type="text" value="20"></div><button id="slotBtn" class="secondary" style="width:100%">Crear ranura press-fit</button><p class="section-note">Ancho = <b>t + clearance</b>.</p></div></section>';left.appendChild(laser);
     const inspector=$('inspectorTab');const manu=document.createElement('section');manu.className='section';manu.innerHTML='<h3>Fabricabilidad</h3><div id="manufacturingPanel" class="card manufacturing-card"></div>';inspector.appendChild(manu);
     const files=document.querySelector('.file-actions');const kerfBtn=document.createElement('button');kerfBtn.id='kerfSvgBtn';kerfBtn.className='optional';kerfBtn.textContent='SVG kerf';kerfBtn.title='Exporta perfiles cerrados con compensación ± kerf/2';files.insertBefore(kerfBtn,$('helpBtn'));
-    $('addParameterBtn').onclick=addParameter;$('concentricBtn').onclick=()=>addAdvancedRelation('concentric');$('tangentBtn').onclick=()=>addAdvancedRelation('tangent');$('equalRadiusBtn').onclick=()=>addAdvancedRelation('equalRadius');$('fixBtn').onclick=()=>addAdvancedRelation('fix');$('offsetBtn').onclick=createOffsetFeature;$('chamferBtn').onclick=doChamfer060;$('slotBtn').onclick=createPressFitSlot;$('kerfView').onchange=render;$('sheetW').onchange=render;$('sheetH').onchange=render;$('kerfSvgBtn').onclick=()=>{try{const a=analyzeManufacturing();download('lasersketch_v070_kerf.svg',exportKerfSVG(),'image/svg+xml');msg(a.ok?'SVG con kerf exportado.':'SVG con kerf exportado con advertencias: '+a.issues.map(i=>i.text).join(' '),a.ok?'good':'warn')}catch(err){msg(err.message,'bad')}};
+    $('addParameterBtn').onclick=addParameter;$('concentricBtn').onclick=()=>addAdvancedRelation('concentric');$('tangentBtn').onclick=()=>addAdvancedRelation('tangent');$('equalRadiusBtn').onclick=()=>addAdvancedRelation('equalRadius');$('fixBtn').onclick=()=>addAdvancedRelation('fix');$('offsetBtn').onclick=createOffsetFeature;$('chamferBtn').onclick=doChamfer060;$('slotBtn').onclick=createPressFitSlot;$('kerfView').onchange=render;$('sheetW').onchange=render;$('sheetH').onchange=render;$('kerfSvgBtn').onclick=()=>{try{const a=analyzeManufacturing();download('lasersketch_v073_kerf.svg',exportKerfSVG(),'image/svg+xml');msg(a.ok?'SVG con kerf exportado.':'SVG con kerf exportado con advertencias: '+a.issues.map(i=>i.text).join(' '),a.ok?'good':'warn')}catch(err){msg(err.message,'bad')}};
     const thickness=$('thickness'),kerf=$('kerf');if(thickness)thickness.addEventListener('change',()=>{parameterDefs.t=String(Number(thickness.value)||3);renderParameterList()});if(kerf)kerf.addEventListener('change',()=>{parameterDefs.kerf=String(Number(kerf.value)||0);renderParameterList();render()});renderParameterList();
   };
 
@@ -2178,7 +2262,7 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
   compensatedProfile=function(p,kerf){return curveOffsetProfile(p,kerf/2,p.kind==='outer',kerfCurveTolerance())};
   renderKerfOverlay=function(){const g=ensureManufacturingLayer();g.innerHTML='';if(!$('kerfView')?.checked)return;const k=Math.max(0,Number($('kerf').value)||0),tol=kerfCurveTolerance();for(const p of discoverProfiles('cut').filter(p=>p.closed)){try{const o=curveOffsetProfile(p,k/2,p.kind==='outer',tol),path=svgEl('path',{d:svgPathFromCurveOffset(o),class:'vector-offset'+(o.segments.some(s=>s.type==='bezier')?' bezier-offset':'')});g.appendChild(path)}catch(err){}}
   };
-  exportKerfSVG=function(){validateGeometry();const a=analyzeManufacturing(),k=Math.max(0,Number($('kerf').value)||0),b=modelBounds(true),m=2,tol=kerfCurveTolerance();let body='';const profEntities=new Set(a.profiles.filter(p=>p.closed).flatMap(p=>p.entityIds));for(const p of a.profiles.filter(p=>p.closed)){const o=curveOffsetProfile(p,k/2,p.kind==='outer',tol);body+=`<path d="${svgPathFromCurveOffset(o)}" fill="none" stroke="${layerStroke.cut}" stroke-width="0.1"/>\n`}for(const e of state.entities){if(e.layer==='construction'||profEntities.has(e.id))continue;const stroke=layerStroke[e.layer]||layerStroke.cut;if(e.type==='line'){const x=pBy(e.a),y=pBy(e.b);body+=`<line x1="${x.x}" y1="${x.y}" x2="${y.x}" y2="${y.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='circle'){const c=pBy(e.c);body+=`<circle cx="${c.x}" cy="${c.y}" r="${e.r}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='arc'){const i=arcInfo(e);body+=`<path d="M ${i.a.x} ${i.a.y} A ${e.r} ${e.r} 0 ${i.large?1:0} ${e.sweep?1:0} ${i.b.x} ${i.b.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='bezier')body+=`<path d="${bezierPath(e)}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`;else if(e.type==='text'){const c=pBy(e.c);body+=`<text x="${c.x}" y="${c.y}" fill="${stroke}" font-family="${escapeXML(e.font||'sans-serif')}" font-size="${e.size}">${escapeXML(e.text)}</text>\n`}}return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${b.w+2*m}mm" height="${b.h+2*m}mm" viewBox="${b.x-m} ${b.y-m} ${b.w+2*m} ${b.h+2*m}">\n${body}</svg>`};
+  exportKerfSVG=function(){validateGeometry();const a=analyzeManufacturing(),k=Math.max(0,Number($('kerf').value)||0),b=modelBounds(true),m=2,tol=kerfCurveTolerance();let body='';const profEntities=new Set(a.profiles.filter(p=>p.closed).flatMap(p=>p.entityIds));for(const p of a.profiles.filter(p=>p.closed)){const o=curveOffsetProfile(p,k/2,p.kind==='outer',tol);body+=`<path d="${svgPathFromCurveOffset(o)}" fill="none" stroke="${layerStroke.cut}" stroke-width="0.1"/>\n`}for(const e of state.entities){if(e.layer==='construction'||profEntities.has(e.id))continue;const stroke=layerStroke[e.layer]||layerStroke.cut;if(e.type==='line'){const x=pBy(e.a),y=pBy(e.b);body+=`<line x1="${x.x}" y1="${x.y}" x2="${y.x}" y2="${y.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='circle'){const c=pBy(e.c);body+=`<circle cx="${c.x}" cy="${c.y}" r="${e.r}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='arc'){const i=arcInfo(e);body+=`<path d="M ${i.a.x} ${i.a.y} A ${e.r} ${e.r} 0 ${i.large?1:0} ${e.sweep?1:0} ${i.b.x} ${i.b.y}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`}else if(e.type==='bezier')body+=`<path d="${bezierPath(e)}" fill="none" stroke="${stroke}" stroke-width="0.1"/>\n`;else if(e.type==='text'){const c=pBy(e.c);body+=`<text x="${c.x}" y="${c.y}" ${svgTextStyle(e,stroke)} font-family="${escapeXML(e.font||'sans-serif')}" font-size="${e.size}" font-weight="${e.weight||400}" text-anchor="${['start','middle','end'].includes(e.align)?e.align:'start'}" transform="rotate(${e.rotation||0} ${c.x} ${c.y})">${escapeXML(e.text)}</text>\n`}}return `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${b.w+2*m}mm" height="${b.h+2*m}mm" viewBox="${b.x-m} ${b.y-m} ${b.w+2*m} ${b.h+2*m}">\n${body}</svg>`};
   createOffsetFeature=function(){const p=profileForSelection();if(!p){msg('Selecciona una entidad que pertenezca a un perfil cerrado de corte.','warn');return}let d;try{d=numberExpression($('offsetDistance').value)}catch(err){msg(err.message,'bad');return}const tol=kerfCurveTolerance();let o;try{o=curveOffsetProfile(p,Math.abs(d),d>=0,tol)}catch(err){msg(err.message,'bad');return}pushHistory();pending.label='Offset vectorial';const layer=$('activeLayer').value,ids=[];if(o.circle){const c=newPoint(o.circle.cx,o.circle.cy);ids.push(newCircle(c,o.circle.r,layer,{primitive:'offset-vector'}).id)}else{let first=null,current=null;for(const s of o.segments){const start=segStart(s),end=segEnd(s);if(!current||dist(current,start)>1e-7)current=newPoint(start.x,start.y);if(!first)first=current;if(s.type==='line'){const b=newPoint(end.x,end.y);ids.push(newLine(current,b,layer,{primitive:'offset-vector'}).id);current=b}else if(s.type==='arc'){const b=newPoint(end.x,end.y);ids.push(newArc(current,b,s.cx,s.cy,s.r,s.dir>0?1:0,layer,{primitive:'offset-vector'}).id);current=b}else{const c1=newPoint(s.P[1].x,s.P[1].y),c2=newPoint(s.P[2].x,s.P[2].y),b=newPoint(end.x,end.y);ids.push(newBezier(current,c1,c2,b,layer,{primitive:'offset-vector'}).id);current=b}}if(first&&current&&dist(first,current)<Math.max(1e-6,tol*.2)){for(const e of state.entities.filter(e=>ids.includes(e.id)))if(e.b===current.id)e.b=first.id;cleanOrphans()}}
     state.selection={kind:'entity',ids};render();msg('Offset '+d+' mm creado con líneas/arcos exactos y '+ids.filter(id=>eBy(id)?.type==='bezier').length+' tramo(s) Bézier. Tolerancia '+tol+' mm.')};
 
@@ -2193,6 +2277,41 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
   function createContoursFromCommands(commands,layer,meta={}){let current=null,start=null,ids=[];const point=q=>newPoint(q.x,q.y);for(const c of commands){if(c.type==='M'){current=point(c);start=current}else if(c.type==='L'&&current){const b=point(c);ids.push(newLine(current,b,layer,{primitive:'font-outline',...meta}).id);current=b}else if(c.type==='C'&&current){const h1=point({x:c.x1,y:c.y1}),h2=point({x:c.x2,y:c.y2}),b=point(c);ids.push(newBezier(current,h1,h2,b,layer,{primitive:'font-outline',...meta}).id);current=b}else if(c.type==='Q'&&current){const end={x:c.x,y:c.y},q={x:c.x1,y:c.y1},p0={x:current.x,y:current.y},c1={x:p0.x+2*(q.x-p0.x)/3,y:p0.y+2*(q.y-p0.y)/3},c2={x:end.x+2*(q.x-end.x)/3,y:end.y+2*(q.y-end.y)/3},h1=point(c1),h2=point(c2),b=point(end);ids.push(newBezier(current,h1,h2,b,layer,{primitive:'font-outline',...meta}).id);current=b}else if(c.type==='Z'&&current&&start){if(current.id!==start.id&&dist(current,start)>1e-8)ids.push(newLine(current,start,layer,{primitive:'font-outline',...meta}).id);current=start}}return ids}
   async function convertSelectedTextToContours(){const es=selE();if(es.length!==1||es[0].type!=='text'){msg('Selecciona un único texto para convertirlo a contornos.','warn');return}const e=es[0],originalId=e.id;try{fontEngineState={status:'loading',message:'Preparando '+e.font+'…'};updateEngineStatus();const font=await googleFontForText(e.font||'Roboto',e.weight||400,e.text||' '),commands=outlineCommandsForText(font,e);if(!commands.length)throw Error('La fuente no generó contornos');pushHistory();pending.label='Texto a contornos';const ids=createContoursFromCommands(commands,e.layer,{sourceText:originalId,font:e.font});removeEntity(originalId);cleanOrphans();state.selection={kind:'entity',ids};fontEngineState={status:'ready',message:'Texto convertido: '+ids.length+' segmentos/curvas'};render();msg('Texto convertido a '+ids.length+' entidades vectoriales. Ya no depende de la fuente instalada.') }catch(err){fontEngineState={status:'error',message:err.message};updateEngineStatus();msg('No se pudo convertir el texto: '+err.message,'bad')}}
 
+
+  // ---- 0.71 text outline + stencil bridges ----------------------------------
+  function commandContours(commands){
+    const contours=[];let contour=null,current=null,start=null;const P=(x,y)=>({x,y}),add=s=>{if(contour)contour.segments.push(s)};
+    for(const c of commands){
+      if(c.type==='M'){if(contour&&contour.segments.length)contours.push(contour);current=P(c.x,c.y);start={...current};contour={start:{...current},segments:[]}}
+      else if(c.type==='L'&&current){const b=P(c.x,c.y);add({type:'L',p0:{...current},p1:b});current=b}
+      else if(c.type==='C'&&current){const b=P(c.x,c.y);add({type:'C',p0:{...current},c1:P(c.x1,c.y1),c2:P(c.x2,c.y2),p1:b});current=b}
+      else if(c.type==='Q'&&current){const b=P(c.x,c.y),q=P(c.x1,c.y1),c1=P(current.x+2*(q.x-current.x)/3,current.y+2*(q.y-current.y)/3),c2=P(b.x+2*(q.x-b.x)/3,b.y+2*(q.y-b.y)/3);add({type:'C',p0:{...current},c1,c2,p1:b});current=b}
+      else if(c.type==='Z'&&current&&start){if(dist(current,start)>1e-8)add({type:'L',p0:{...current},p1:{...start}});if(contour&&contour.segments.length)contours.push(contour);contour=null;current={...start}}
+    }
+    if(contour&&contour.segments.length)contours.push(contour);return contours
+  }
+  function cubicPointSeg071(s,t){const u=1-t;return{x:u*u*u*s.p0.x+3*u*u*t*s.c1.x+3*u*t*t*s.c2.x+t*t*t*s.p1.x,y:u*u*u*s.p0.y+3*u*u*t*s.c1.y+3*u*t*t*s.c2.y+t*t*t*s.p1.y}}
+  function sampleContour071(c){const out=[];for(const s of c.segments){const n=s.type==='C'?24:1;for(let i=0;i<n;i++){const t=i/n;out.push(s.type==='C'?cubicPointSeg071(s,t):{x:s.p0.x+(s.p1.x-s.p0.x)*t,y:s.p0.y+(s.p1.y-s.p0.y)*t})}}if(c.segments.length)out.push({...c.segments[c.segments.length-1].p1});return out}
+  function polygonCentroid071(poly){let A=0,cx=0,cy=0;for(let i=0;i<poly.length-1;i++){const p=poly[i],q=poly[i+1],z=p.x*q.y-q.x*p.y;A+=z;cx+=(p.x+q.x)*z;cy+=(p.y+q.y)*z}return Math.abs(A)<1e-9?averagePoint(poly):{x:cx/(3*A),y:cy/(3*A)}}
+  function horizontalRayHits071(poly,y){const xs=[];for(let i=0;i<poly.length-1;i++){const a=poly[i],b=poly[i+1];if((a.y>y)!==(b.y>y)){const x=a.x+(y-a.y)*(b.x-a.x)/(b.y-a.y);if(Number.isFinite(x))xs.push(x)}}return xs.sort((a,b)=>a-b)}
+  function stencilBridgeRects(contours,width){
+    const data=contours.map((c,i)=>{const poly=sampleContour071(c);return{i,c,poly,area:signedArea(poly),center:polygonCentroid071(poly)}}),bridges=[];
+    for(const h of data){let depth=0,containers=[];for(const p of data)if(p!==h&&Math.abs(p.area)>Math.abs(h.area)+1e-6&&pointInPolygon(h.center,p.poly)){depth++;containers.push(p)}if(depth%2!==1)continue;
+      const parent=containers.sort((a,b)=>Math.abs(a.area)-Math.abs(b.area))[0];if(!parent)continue;
+      const hx=Math.max(...h.poly.map(p=>p.x)),hmin=Math.min(...h.poly.map(p=>p.x)),y=h.center.y,hits=horizontalRayHits071(parent.poly,y),right=hits.filter(x=>x>hx+1e-4)[0],left=[...hits].reverse().find(x=>x<hmin-1e-4);let x0,x1;
+      if(Number.isFinite(right)&&(!Number.isFinite(left)||right-hx<=hmin-left)){x0=hx-width*.55;x1=right+width*.55}else if(Number.isFinite(left)){x0=left-width*.55;x1=hmin+width*.55}else continue;
+      bridges.push({x0:Math.min(x0,x1),x1:Math.max(x0,x1),y0:y-width/2,y1:y+width/2,hole:h.i,parent:parent.i})
+    }return bridges
+  }
+  const insideRect071=(p,r)=>p.x>r.x0+1e-9&&p.x<r.x1-1e-9&&p.y>r.y0+1e-9&&p.y<r.y1-1e-9;
+  function lineBoundaryTs071(s,r){const ts=[0,1],dx=s.p1.x-s.p0.x,dy=s.p1.y-s.p0.y;if(Math.abs(dx)>1e-12)for(const x of[r.x0,r.x1]){const t=(x-s.p0.x)/dx,y=s.p0.y+t*dy;if(t>0&&t<1&&y>=r.y0-1e-9&&y<=r.y1+1e-9)ts.push(t)}if(Math.abs(dy)>1e-12)for(const y of[r.y0,r.y1]){const t=(y-s.p0.y)/dy,x=s.p0.x+t*dx;if(t>0&&t<1&&x>=r.x0-1e-9&&x<=r.x1+1e-9)ts.push(t)}return ts}
+  function cubicBoundaryRoots071(s,axis,value){const f=t=>cubicPointSeg071(s,t)[axis]-value,roots=[],N=72;let t0=0,v0=f(0);for(let i=1;i<=N;i++){const t1=i/N,v1=f(t1);if(Math.abs(v0)<1e-8)roots.push(t0);if(v0*v1<0){let a=t0,b=t1,fa=v0;for(let k=0;k<38;k++){const m=(a+b)/2,fm=f(m);if(fa*fm<=0)b=m;else{a=m;fa=fm}}roots.push((a+b)/2)}t0=t1;v0=v1}return roots.filter(t=>t>1e-8&&t<1-1e-8)}
+  function cubicSub071(s,t0,t1){let R=[s.p0,s.c1,s.c2,s.p1];if(t0>1e-12){R=splitControls(R,t0)[1];t1=(t1-t0)/(1-t0)}if(t1<1-1e-12)R=splitControls(R,t1)[0];return{type:'C',p0:{...R[0]},c1:{...R[1]},c2:{...R[2]},p1:{...R[3]}}}
+  function clipSegmentByRects071(s,rects){let ts=[0,1];for(const r of rects){if(s.type==='L')ts.push(...lineBoundaryTs071(s,r));else{for(const x of[r.x0,r.x1])ts.push(...cubicBoundaryRoots071(s,'x',x));for(const y of[r.y0,r.y1])ts.push(...cubicBoundaryRoots071(s,'y',y))}}ts=[...new Set(ts.map(t=>Math.max(0,Math.min(1,t)).toFixed(10)))].map(Number).sort((a,b)=>a-b);const out=[];for(let i=0;i<ts.length-1;i++){const a=ts[i],b=ts[i+1];if(b-a<1e-8)continue;const m=(a+b)/2,p=s.type==='C'?cubicPointSeg071(s,m):{x:s.p0.x+(s.p1.x-s.p0.x)*m,y:s.p0.y+(s.p1.y-s.p0.y)*m};if(rects.some(r=>insideRect071(p,r)))continue;if(s.type==='L')out.push({type:'L',p0:{x:s.p0.x+(s.p1.x-s.p0.x)*a,y:s.p0.y+(s.p1.y-s.p0.y)*a},p1:{x:s.p0.x+(s.p1.x-s.p0.x)*b,y:s.p0.y+(s.p1.y-s.p0.y)*b}});else out.push(cubicSub071(s,a,b))}return out}
+  function createNativeSegments071(segments,layer,meta={}){const cache=new Map(),ids=[],key=p=>`${p.x.toFixed(8)},${p.y.toFixed(8)}`,endpoint=p=>{const k=key(p);if(cache.has(k))return cache.get(k);const q=newPoint(p.x,p.y);cache.set(k,q);return q};for(const s of segments){const a=endpoint(s.p0),b=endpoint(s.p1);if(dist(a,b)<1e-8)continue;if(s.type==='L')ids.push(newLine(a,b,layer,{primitive:'font-outline',...meta}).id);else ids.push(newBezier(a,newPoint(s.c1.x,s.c1.y),newPoint(s.c2.x,s.c2.y),b,layer,{primitive:'font-outline',...meta}).id)}return ids}
+  async function createSelectedTextStencil(){const es=selE();if(es.length!==1||es[0].type!=='text'){msg('Selecciona un único texto para crear el stencil.','warn');return}const e=es[0],originalId=e.id,width=Math.max(.2,Number($('stencilBridgeWidth')?.value)||1.2);try{fontEngineState={status:'loading',message:'Calculando contraformas y puentes…'};updateEngineStatus();const font=await googleFontForText(e.font||'Roboto',e.weight||400,e.text||' '),commands=outlineCommandsForText(font,e),contours=commandContours(commands);if(!contours.length)throw Error('La fuente no generó contornos');const rects=stencilBridgeRects(contours,width);let segments=contours.flatMap(c=>c.segments);if(rects.length)segments=segments.flatMap(s=>clipSegmentByRects071(s,rects));pushHistory();pending.label='Texto stencil';const ids=createNativeSegments071(segments,e.layer,{sourceText:originalId,font:e.font,stencil:true,bridgeWidth:width});removeEntity(originalId);cleanOrphans();state.selection={kind:'entity',ids};fontEngineState={status:'ready',message:`Stencil: ${rects.length} puente(s), ${ids.length} entidades`};render();msg(rects.length?`Stencil creado con ${rects.length} puente(s) de ${width} mm. Solo quedan contornos de corte.`:'No se detectaron contraformas internas; se convirtió a contornos normales.')}catch(err){fontEngineState={status:'error',message:err.message};updateEngineStatus();msg('No se pudo crear el stencil: '+err.message,'bad')}}
+
+
   // ---- 0.70 UI / metadata ----------------------------------------------------
   const buildUI060=buildUI;buildUI=function(){buildUI060();const left=$('leftPanel');
     const engine=document.createElement('details');engine.open=true;engine.innerHTML='<summary>Motor CAD 0.70</summary><section class="section"><div class="engine-card"><div class="engine-row"><strong>Restricciones</strong><span id="solverBackendStatus" class="backend-status loading">cargando…</span></div><div id="solverBackendDetail" class="engine-note">Inicializando libslvs/SolveSpace…</div><div class="engine-row"><strong>Offset de curvas</strong><span class="backend-status ready">vectorial</span></div><div class="curve-quality"><label for="curveOffsetTolerance">Tolerancia Bézier · mm</label><input id="curveOffsetTolerance" type="text" value="0.01"></div><div class="engine-note">Líneas, círculos y arcos se desplazan exactamente. Las Bézier se reconstruyen como Bézier cúbicas adaptativas, nunca como polilíneas.</div></div></section>';left.insertBefore(engine,left.firstChild);
@@ -2200,20 +2319,613 @@ button:focus-visible{outline:3px solid #2fa4da;outline-offset:2px}button:disable
     if($('offsetBtn'))$('offsetBtn').onclick=createOffsetFeature;if($('curveOffsetTolerance'))$('curveOffsetTolerance').onchange=()=>render();
     const dlg=$('helpDialog');if(dlg){const p=document.createElement('p');p.innerHTML='<b>Motor 0.70:</b> intenta usar el solver oficial libslvs/SolveSpace compilado a WebAssembly. Si la red o el WASM no están disponibles, mantiene el solver JS como fallback visible. El kerf conserva líneas/arcos exactos y ajusta offsets de Bézier con curvas cúbicas adaptativas. Los textos de Google Fonts se pueden convertir a contornos reales mediante opentype.js.';dlg.appendChild(p)}updateEngineStatus()
   };
-  const projectData060=projectData;projectData=function(){const d=projectData060();d.version='0.70';d.engine={preferredSolver:'SolveSpace/libslvs WASM',offsetRepresentation:'line-arc-cubic',bezierOffsetTolerance:kerfCurveTolerance(),textContours:'opentype.js + Google Fonts WOFF2'};return d};
+  const projectData060=projectData;projectData=function(){const d=projectData060();d.version='0.73';d.engine={preferredSolver:'SolveSpace/libslvs WASM',offsetRepresentation:'line-arc-cubic',bezierOffsetTolerance:kerfCurveTolerance(),textContours:'opentype.js + Google Fonts WOFF2'};return d};
   const updateDiagnostics060=updateDiagnostics;updateDiagnostics=function(){updateDiagnostics060();const pill=$('sketchState')?.querySelector('.solver-pill');if(pill){pill.classList.remove('wasm','hybrid','fallback');pill.classList.add(solverState.mode.includes('hybrid')?'hybrid':solverState.mode.includes('WASM')?'wasm':'fallback')}updateEngineStatus()};
   const renderPropertyPanel070base=renderPropertyPanel;renderPropertyPanel=function(){renderPropertyPanel070base();const es=selE();if(es.length===1&&es[0].type==='text'){const b=document.createElement('button');b.className='secondary';b.style.width='100%';b.style.marginTop='10px';b.textContent='Convertir a contornos de corte';b.onclick=convertSelectedTextToContours;$('propertyPanel').appendChild(b)}};
 
 
+
+  // ---- 0.71 UI integration ---------------------------------------------------
+  const buildUI071base=buildUI;buildUI=function(){buildUI071base();const textDetails=$('leftPanel').querySelector('details[data-section="text"]');if(textDetails){const box=textDetails.querySelector('.outline-action');if(box&&!$('textStencilBtn')){const stencil=document.createElement('button');stencil.id='textStencilBtn';stencil.className='secondary';stencil.textContent='Crear stencil con puentes';stencil.onclick=createSelectedTextStencil;const outline=$('textOutlineBtn');if(outline)outline.textContent='Convertir a contornos';box.insertBefore(stencil,$('fontEngineStatus'))}}const dlg=$('helpDialog');if(dlg){const p=document.createElement('p');p.innerHTML='<b>Texto 0.71:</b> el modo visual por defecto es Solo contorno. Convertir a contornos crea líneas/Bézier reales. Crear stencil detecta contraformas y abre puentes de ancho configurable.';dlg.appendChild(p)}updateFontPreview()};
+  const projectData071base=projectData;projectData=function(){const d=projectData071base();d.version='0.73';d.engine={...(d.engine||{}),textDisplayDefault:'outline',stencilBridges:'automatic counterform bridges'};return d};
+  const renderPropertyPanel071base=renderPropertyPanel;renderPropertyPanel=function(){renderPropertyPanel071base();const es=selE();if(es.length===1&&es[0].type==='text'&&!$('propertyStencilBtn')){const b=document.createElement('button');b.id='propertyStencilBtn';b.className='secondary';b.style.width='100%';b.style.marginTop='7px';b.textContent='Crear stencil con puentes';b.onclick=createSelectedTextStencil;$('propertyPanel').appendChild(b)}};
+
+
+
+  // ---- 0.72 editing, centers, clipboard and intersection snaps ---------------
+
+  // Complete rectangular primitives, independently of current selection.
+  function completeRectangles072(){
+    const groups=new Map();
+    for(const e of state.entities){
+      if(e.type!=='line'||e.primitive!=='rectangle'||!e.group)continue;
+      if(!groups.has(e.group))groups.set(e.group,[]);
+      groups.get(e.group).push(e)
+    }
+    const out=[];
+    for(const [group,lines] of groups){
+      if(lines.length!==4)continue;
+      const pointIds=[...new Set(lines.flatMap(e=>[e.a,e.b]))];
+      if(pointIds.length!==4)continue;
+      const points=pointIds.map(pBy).filter(Boolean);
+      if(points.length!==4)continue;
+      const rect={group,lines,points},m=rectangleMetrics(rect);
+      out.push({kind:'rectangle',group,ids:lines.map(e=>e.id),pointIds,center:{x:m.x+m.w/2,y:m.y+m.h/2},bounds:{minX:m.x,maxX:m.x+m.w,minY:m.y,maxY:m.y+m.h},rect})
+    }
+    return out
+  }
+
+  function circleShape072(e){
+    if(!e||e.type!=='circle')return null;
+    const c=pBy(e.c);if(!c)return null;
+    return{kind:'circle',entity:e.id,ids:[e.id],pointIds:[e.c],center:{x:c.x,y:c.y},bounds:{minX:c.x-e.r,maxX:c.x+e.r,minY:c.y-e.r,maxY:c.y+e.r}}
+  }
+
+  function toggleEntitySet072(ids,additive){
+    const target=new Set(ids);
+    if(!additive){state.selection={kind:'entity',ids:[...target]};render();return}
+    const old=state.selection.kind==='entity'?new Set(state.selection.ids):new Set();
+    const allPresent=[...target].every(id=>old.has(id));
+    for(const id of target)allPresent?old.delete(id):old.add(id);
+    state.selection={kind:'entity',ids:[...old]};
+    render()
+  }
+
+  function shapeSelected072(shape){
+    if(state.selection.kind!=='entity')return false;
+    const s=new Set(state.selection.ids);
+    return shape.ids.every(id=>s.has(id))
+  }
+
+  function renderShapeCenterPicks072(){
+    if(state.tool!=='select')return;
+    const r=handleR()*1.35,arm=r*.8;
+    const shapes=[
+      ...completeRectangles072(),
+      ...state.entities.filter(e=>e.type==='circle').map(circleShape072).filter(Boolean)
+    ];
+    for(const shape of shapes){
+      if(shapeSelected072(shape))continue; // selected geometry already gets the orange move handle
+      const shapeFull=shape.ids.length&&shape.ids.every(id=>isEntityFullyDefined073(id));
+      const g=svgEl('g',{class:'shape-center-pick'+(shapeFull?' fully-defined':'')});
+      const hit=svgEl('circle',{cx:shape.center.x,cy:shape.center.y,r:r*1.25,'vector-effect':'non-scaling-stroke'});
+      hit.style.cursor='pointer';
+      hit.addEventListener('pointerdown',ev=>{
+        if(state.tool!=='select')return;
+        ev.stopPropagation();ev.preventDefault();
+        toggleEntitySet072(shape.ids,ev.shiftKey);
+        msg(shape.kind==='rectangle'?'Rectángulo seleccionado desde su centro.':'Círculo seleccionado desde su centro.')
+      });
+      const h=svgEl('line',{x1:shape.center.x-arm,y1:shape.center.y,x2:shape.center.x+arm,y2:shape.center.y});
+      const v=svgEl('line',{x1:shape.center.x,y1:shape.center.y-arm,x2:shape.center.x,y2:shape.center.y+arm});
+      g.append(hit,h,v);pointsLayer.appendChild(g)
+    }
+  }
+
+  const renderMoveHandles072base=renderMoveHandles;
+  renderMoveHandles=function(){renderShapeCenterPicks072();renderMoveHandles072base()};
+
+  // --- Selection objects and alignment ---------------------------------------
+  function selectionObjects072(){
+    if(state.selection.kind!=='entity'||!state.selection.ids.length)return[];
+    const objects=[],used=new Set(),rects=completeRectangles072(),rectByEntity=new Map();
+    for(const r of rects)for(const id of r.ids)rectByEntity.set(id,r);
+    for(const id of state.selection.ids){
+      if(used.has(id))continue;
+      const rect=rectByEntity.get(id);
+      if(rect){
+        objects.push({...rect});
+        rect.ids.forEach(x=>used.add(x));
+        continue
+      }
+      const e=eBy(id);if(!e)continue;
+      const pts=boundsPoints(e);if(!pts.length)continue;
+      const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+      objects.push({
+        kind:e.type,entity:e.id,ids:[e.id],pointIds:entityPointIds(e),
+        arcCenters:e.type==='arc'?[e.id]:[],
+        bounds:{minX:Math.min(...xs),maxX:Math.max(...xs),minY:Math.min(...ys),maxY:Math.max(...ys)},
+        center:{x:(Math.min(...xs)+Math.max(...xs))/2,y:(Math.min(...ys)+Math.max(...ys))/2}
+      });
+      used.add(id)
+    }
+    return objects
+  }
+
+  function translateObject072(obj,dx,dy){
+    const seen=new Set();
+    for(const pid of obj.pointIds||[]){
+      if(seen.has(pid))continue;seen.add(pid);
+      const p=pBy(pid);if(p){p.x+=dx;p.y+=dy}
+    }
+    for(const eid of obj.arcCenters||[]){
+      const e=eBy(eid);if(e?.type==='arc'){e.cx+=dx;e.cy+=dy}
+    }
+  }
+
+  function alignSelection072(mode){
+    const objects=selectionObjects072();
+    if(objects.length<2){msg('Selecciona al menos dos figuras. La primera seleccionada será la referencia.','warn');return}
+    const ref=objects[0],rb=ref.bounds;
+    const target={
+      left:rb.minX,centerX:(rb.minX+rb.maxX)/2,right:rb.maxX,
+      top:rb.minY,centerY:(rb.minY+rb.maxY)/2,bottom:rb.maxY
+    }[mode];
+    pushHistory();holding++;
+    try{
+      for(const obj of objects.slice(1)){
+        const b=obj.bounds;let dx=0,dy=0;
+        if(mode==='left')dx=target-b.minX;
+        else if(mode==='centerX')dx=target-(b.minX+b.maxX)/2;
+        else if(mode==='right')dx=target-b.maxX;
+        else if(mode==='top')dy=target-b.minY;
+        else if(mode==='centerY')dy=target-(b.minY+b.maxY)/2;
+        else if(mode==='bottom')dy=target-b.maxY;
+        translateObject072(obj,dx,dy)
+      }
+      holding--;solve();render();msg('Alineación aplicada. La primera figura seleccionada se mantuvo como referencia.')
+    }catch(err){holding=Math.max(0,holding-1);state.history.pop();msg('No se pudo alinear: '+err.message,'bad')}
+  }
+
+  // --- Center coincidence -----------------------------------------------------
+  function centerShapeRef072(shape){
+    return shape.kind==='circle'?{kind:'circle',entity:shape.entity}:{kind:'rectangle',group:shape.group}
+  }
+  function centerFromRef072(ref){
+    if(!ref)return null;
+    if(ref.kind==='circle'){
+      const e=eBy(ref.entity);if(!e||e.type!=='circle')return null;const c=pBy(e.c);return c?{x:c.x,y:c.y}:null
+    }
+    if(ref.kind==='rectangle'){
+      const rect=completeRectangles072().find(r=>r.group===ref.group);
+      return rect?{...rect.center}:null
+    }
+    return null
+  }
+  function selectedCenterShapes072(){
+    if(state.selection.kind!=='entity')return[];
+    const selected=new Set(state.selection.ids),out=[],used=new Set();
+    for(const rect of completeRectangles072()){
+      if(rect.ids.some(id=>selected.has(id))){out.push(rect);rect.ids.forEach(id=>used.add(id))}
+    }
+    for(const id of state.selection.ids){
+      if(used.has(id))continue;const e=eBy(id);
+      if(e?.type==='circle'){out.push(circleShape072(e));used.add(id)}
+    }
+    return out
+  }
+  function makeCentersCoincident072(){
+    const shapes=selectedCenterShapes072();
+    if(shapes.length!==2||shapes.some(s=>!['circle','rectangle'].includes(s.kind))){
+      msg('Selecciona exactamente dos círculos/rectángulos usando Shift. Puedes hacer clic directamente en sus centros.','warn');return
+    }
+    pushHistory();holding++;
+    const a=shapes[0].center,b=shapes[1].center;
+    translateObject072(shapes[1],a.x-b.x,a.y-b.y);
+    newConstraint('centerCoincident',{shapeA:centerShapeRef072(shapes[0]),shapeB:centerShapeRef072(shapes[1])});
+    holding--;solve();render();msg('Centros coincidentes: la segunda figura se alineó a la primera y la relación quedó activa.')
+  }
+
+  const residualVector072base=residualVector060;
+  residualVector060=function(){
+    const R=residualVector072base();
+    for(const c of state.constraints)if(c.type==='centerCoincident'){
+      const a=centerFromRef072(c.shapeA),b=centerFromRef072(c.shapeB);
+      if(a&&b){R.push(a.x-b.x,a.y-b.y)}
+    }
+    return R
+  };
+
+  const constraintErrors072base=constraintErrors;
+  constraintErrors=function(){
+    const errors=constraintErrors072base();
+    for(const c of state.constraints)if(c.type==='centerCoincident'){
+      const a=centerFromRef072(c.shapeA),b=centerFromRef072(c.shapeB);
+      if(!a||!b)errors.push('La relación '+c.id+' perdió una de sus figuras.');
+      else{const r=dist(a,b);if(r>1e-4)errors.push('Revisa la relación '+c.id+' (centros coincidentes): residual '+Number(r.toFixed(5)))}
+    }
+    return [...new Set(errors)]
+  };
+
+  // --- Internal CAD clipboard: Ctrl+C / Ctrl+V -------------------------------
+  let geometryClipboard072=null;
+  function copySelection072(){
+    if(state.selection.kind!=='entity'||!state.selection.ids.length){msg('Selecciona geometría antes de copiar.','warn');return false}
+    const entityIds=new Set(state.selection.ids),entities=[...entityIds].map(eBy).filter(Boolean).map(clone);
+    const pointIds=new Set(entities.flatMap(entityPointIds));
+    const points=[...pointIds].map(pBy).filter(Boolean).map(clone);
+    const refs=c=>[
+      ...['entity','entityA','entityB','entityC','entityD'].map(k=>c[k]).filter(Boolean).map(id=>['e',id]),
+      ...['p1','p2'].map(k=>c[k]).filter(Boolean).map(id=>['p',id])
+    ];
+    const shapeInside=ref=>{
+      if(!ref)return false;
+      if(ref.kind==='circle')return entityIds.has(ref.entity);
+      if(ref.kind==='rectangle'){
+        const r=completeRectangles072().find(x=>x.group===ref.group);
+        return !!r&&r.ids.every(id=>entityIds.has(id))
+      }
+      return false
+    };
+    const constraints=state.constraints.filter(c=>{
+      if(c.type==='centerCoincident')return shapeInside(c.shapeA)&&shapeInside(c.shapeB);
+      const rr=refs(c);if(!rr.length)return false;
+      return rr.every(([kind,id])=>kind==='e'?entityIds.has(id):pointIds.has(id))
+    }).map(clone);
+    const pts=entities.flatMap(boundsPoints),center=bboxCenter(pts);
+    geometryClipboard072={entities,points,constraints,center,pasteCount:0};
+    msg(`${entities.length} entidad(es) copiadas. Ctrl+V para pegar.`);return true
+  }
+
+  function remapShapeRef072(ref,entityMap,groupMap){
+    if(!ref)return ref;
+    if(ref.kind==='circle')return{...ref,entity:entityMap.get(ref.entity)||ref.entity};
+    if(ref.kind==='rectangle')return{...ref,group:groupMap.get(ref.group)||ref.group};
+    return clone(ref)
+  }
+
+  function pasteSelection072(){
+    const clip=geometryClipboard072;if(!clip){msg('No hay geometría copiada.','warn');return}
+    clip.pasteCount++;const d=10*clip.pasteCount;
+    pushHistory();holding++;
+    try{
+      const pointMap=new Map(),entityMap=new Map(),groupMap=new Map();
+      for(const p of clip.points){const q=newPoint(p.x+d,p.y+d);pointMap.set(p.id,q.id)}
+      for(const e0 of clip.entities){
+        const e=clone(e0),oldId=e.id;e.id='e'+state.nextEntity++;
+        for(const k of ['a','b','c','h1','h2'])if(e[k]&&pointMap.has(e[k]))e[k]=pointMap.get(e[k]);
+        if(e.type==='arc'){e.cx+=d;e.cy+=d}
+        if(e.group){
+          if(!groupMap.has(e.group))groupMap.set(e.group,'copy-'+Date.now()+'-'+Math.random().toString(16).slice(2));
+          e.group=groupMap.get(e.group)
+        }
+        state.entities.push(e);entityMap.set(oldId,e.id)
+      }
+      for(const c0 of clip.constraints){
+        const c=clone(c0);c.id='c'+state.nextConstraint++;
+        for(const k of ['entity','entityA','entityB','entityC','entityD'])if(c[k]&&entityMap.has(c[k]))c[k]=entityMap.get(c[k]);
+        for(const k of ['p1','p2'])if(c[k]&&pointMap.has(c[k]))c[k]=pointMap.get(c[k]);
+        if(c.type==='fixedPoint'){c.x+=d;c.y+=d}
+        if(c.shapeA)c.shapeA=remapShapeRef072(c.shapeA,entityMap,groupMap);
+        if(c.shapeB)c.shapeB=remapShapeRef072(c.shapeB,entityMap,groupMap);
+        state.constraints.push(c)
+      }
+      holding--;state.selection={kind:'entity',ids:[...entityMap.values()]};solve();render();
+      msg(`${entityMap.size} entidad(es) pegadas con desplazamiento de ${d} mm.`)
+    }catch(err){holding=Math.max(0,holding-1);state.history.pop();msg('No se pudo pegar: '+err.message,'bad')}
+  }
+
+  // --- Exact intersection references for drawing ------------------------------
+  function cross072(a,b){return a.x*b.y-a.y*b.x}
+  function bezierLineIntersections072(curve,line){
+    const P=bezierControls(curve),A=pBy(line.a),B=pBy(line.b);if(!P.every(Boolean)||!A||!B)return[];
+    const d={x:B.x-A.x,y:B.y-A.y},f=t=>{const p=cubicAt(P,t);return cross072({x:p.x-A.x,y:p.y-A.y},d)};
+    const roots=[],N=96,eps=1e-9;let t0=0,v0=f(0);
+    for(let i=1;i<=N;i++){
+      const t1=i/N,v1=f(t1);
+      if(Math.abs(v0)<1e-8)roots.push(t0);
+      if(v0*v1<0){
+        let a=t0,b=t1,fa=v0;
+        for(let k=0;k<44;k++){const m=(a+b)/2,fm=f(m);if(fa*fm<=0)b=m;else{a=m;fa=fm}}
+        roots.push((a+b)/2)
+      }
+      t0=t1;v0=v1
+    }
+    if(Math.abs(v0)<1e-8)roots.push(1);
+    const out=[];
+    for(const t of roots){
+      if(t<-eps||t>1+eps)continue;const p=cubicAt(P,clamp(t,0,1)),L2=(d.x*d.x+d.y*d.y)||1,u=((p.x-A.x)*d.x+(p.y-A.y)*d.y)/L2;
+      if(u>=-1e-7&&u<=1+1e-7)out.push({x:p.x,y:p.y,tBezier:t,tLine:u})
+    }
+    return uniquePts(out)
+  }
+
+  function intersections072(a,b){
+    if(a.type==='bezier'&&b.type==='line')return bezierLineIntersections072(a,b);
+    if(b.type==='bezier'&&a.type==='line')return bezierLineIntersections072(b,a);
+    return intersections(a,b)
+  }
+
+  function intersectionSnap072(q){
+    if(!$('objectSnap')?.checked)return null;
+    const search=tol()*5,near=state.entities.filter(e=>e.type!=='text'&&entityDistanceAt(e,q)<=search);
+    let best=null,bd=tol()*1.45;
+    for(let i=0;i<near.length;i++)for(let j=i+1;j<near.length;j++){
+      for(const p of intersections072(near[i],near[j])){
+        const d=dist(p,q);if(d<bd){bd=d;best=p}
+      }
+    }
+    return best
+  }
+
+  function rectangleCenterSnap072(q){
+    let best=null,bd=tol()*1.35;
+    for(const r of completeRectangles072()){const d=dist(r.center,q);if(d<bd){bd=d;best=r.center}}
+    return best
+  }
+
+  const snapped072base=snapped;
+  snapped=function(q){
+    const intersection=intersectionSnap072(q);
+    const rectCenter=rectangleCenterSnap072(q);
+    const base=snapped072base(q),baseInfo=snapInfo?{...snapInfo}:null,candidates=[];
+    if(baseInfo||base?.snapId)candidates.push({p:base,label:baseInfo?.label||'Vértice / centro'});
+    if(rectCenter)candidates.push({p:{...rectCenter,snapId:null},label:'Centro de rectángulo'});
+    if(intersection)candidates.push({p:{...intersection,snapId:null},label:'Intersección'});
+    if(!candidates.length){snapInfo=null;return{...q,snapId:null}}
+    candidates.sort((a,b)=>dist(a.p,q)-dist(b.p,q));
+    const hit=candidates[0];snapInfo={x:hit.p.x,y:hit.p.y,label:hit.label};return{...hit.p}
+  };
+
+  // --- UI ---------------------------------------------------------------------
+  const buildUI072base=buildUI;
+  buildUI=function(){
+    buildUI072base();
+    const left=$('leftPanel');
+    const d=document.createElement('details');d.open=true;d.dataset.section='align';
+    d.innerHTML='<summary>Alinear y centros</summary><section class="section">'+
+      '<p class="small">Selecciona varias figuras con Shift. La primera seleccionada es la referencia.</p>'+
+      '<div class="align-grid">'+
+      '<button id="alignLeftBtn" class="secondary">← Izq.</button><button id="alignCenterXBtn" class="secondary">↔ Centro</button><button id="alignRightBtn" class="secondary">Der. →</button>'+
+      '<button id="alignTopBtn" class="secondary">↑ Arriba</button><button id="alignCenterYBtn" class="secondary">↕ Medio</button><button id="alignBottomBtn" class="secondary">Abajo ↓</button>'+
+      '</div><button id="centerCoincidentBtn" class="secondary" style="width:100%;margin-top:7px">◎ Centros coincidentes</button>'+
+      '<div class="center-relation-note"><span class="intersection-legend"><span class="intersection-dot"></span><b>Intersección</b></span><br>Con Object Snap activo, los cruces línea–línea, línea–arco/círculo y línea–Bézier se convierten automáticamente en referencias de dibujo.</div>'+
+      '<p class="small"><b>Ctrl+C</b> copiar · <b>Ctrl+V</b> pegar (+10 mm por pegado).</p></section>';
+    left.insertBefore(d,left.children[2]||null);
+    $('alignLeftBtn').onclick=()=>alignSelection072('left');
+    $('alignCenterXBtn').onclick=()=>alignSelection072('centerX');
+    $('alignRightBtn').onclick=()=>alignSelection072('right');
+    $('alignTopBtn').onclick=()=>alignSelection072('top');
+    $('alignCenterYBtn').onclick=()=>alignSelection072('centerY');
+    $('alignBottomBtn').onclick=()=>alignSelection072('bottom');
+    $('centerCoincidentBtn').onclick=makeCentersCoincident072;
+    const dlg=$('helpDialog');if(dlg){
+      const p=document.createElement('p');p.innerHTML='<b>Edición 0.72:</b> los círculos y rectángulos tienen un marcador de centro seleccionable. Shift permite seleccionar dos centros y aplicar Centros coincidentes. Ctrl+C/Ctrl+V duplica geometría y relaciones internas. Object Snap reconoce intersecciones, incluida una Bézier que cruza una línea.';
+      dlg.appendChild(p)
+    }
+  };
+
+  // Ctrl+C / Ctrl+V. Do not intercept normal text editing fields.
+  document.addEventListener('keydown',ev=>{
+    if(!(ev.ctrlKey||ev.metaKey))return;
+    if(['INPUT','TEXTAREA','SELECT'].includes(ev.target.tagName))return;
+    const k=ev.key.toLowerCase();
+    if(k==='c'){ev.preventDefault();ev.stopPropagation();copySelection072()}
+    else if(k==='v'){ev.preventDefault();ev.stopPropagation();pasteSelection072()}
+  },true);
+
+  const projectData072base=projectData;
+  projectData=function(){const d=projectData072base();d.version='0.73';d.engine={...(d.engine||{}),clipboard:'internal CAD geometry',intersectionSnap:'line/arc/circle/bezier',shapeCenters:'circle+rectangle'};return d};
+
+
+
+  // ---- 0.73 local degrees of freedom / fully-defined geometry ----------------
+  let definitionState073={
+    signature:'',calculating:false,varFixed:[],pointFixed:new Map(),entityFull:new Map(),
+    entityDOF:new Map(),globalDOF:null,rank:0
+  };
+
+  function definitionSignature073(){
+    // Definition rank may change in singular configurations, so geometry is part of the cache key.
+    return JSON.stringify({
+      p:state.points.map(p=>[p.id,Number(p.x.toFixed(7)),Number(p.y.toFixed(7))]),
+      e:state.entities.map(e=>[
+        e.id,e.type,e.a,e.b,e.c,e.h1,e.h2,e.group,
+        Number.isFinite(e.r)?Number(e.r.toFixed(7)):null,
+        Number.isFinite(e.cx)?Number(e.cx.toFixed(7)):null,
+        Number.isFinite(e.cy)?Number(e.cy.toFixed(7)):null
+      ]),
+      c:state.constraints
+    })
+  }
+
+  function solverVariableIndex073(){
+    const point=new Map(),circleRadius=new Map(),arc=new Map();let i=0;
+    for(const p of state.points){point.set(p.id,{x:i++,y:i++})}
+    for(const e of state.entities){
+      if(e.type==='circle')circleRadius.set(e.id,i++);
+      else if(e.type==='arc')arc.set(e.id,{cx:i++,cy:i++,r:i++})
+    }
+    return{point,circleRadius,arc,count:i}
+  }
+
+  function rrefFixedVariables073(J,n){
+    if(!n)return[];
+    if(!J.length)return Array(n).fill(false);
+    const A=J.map(r=>r.slice()),m=A.length;
+    let scale=0;for(const r of A)for(const v of r)scale=Math.max(scale,Math.abs(v));
+    const tol=Math.max(1e-8,scale*1e-8);
+    const pivots=[];let row=0;
+    for(let col=0;col<n&&row<m;col++){
+      let piv=row;
+      for(let i=row+1;i<m;i++)if(Math.abs(A[i][col])>Math.abs(A[piv][col]))piv=i;
+      if(Math.abs(A[piv][col])<=tol)continue;
+      [A[row],A[piv]]=[A[piv],A[row]];
+      const d=A[row][col];for(let j=col;j<n;j++)A[row][j]/=d;
+      // Full RREF: eliminate above and below. This exposes dependence on free variables.
+      for(let i=0;i<m;i++)if(i!==row){
+        const f=A[i][col];if(Math.abs(f)<=tol)continue;
+        for(let j=col;j<n;j++)A[i][j]-=f*A[row][j]
+      }
+      pivots.push({row,col});row++
+    }
+    const pivotCols=new Set(pivots.map(p=>p.col)),free=[];
+    for(let j=0;j<n;j++)if(!pivotCols.has(j))free.push(j);
+    const fixed=Array(n).fill(false);
+    for(const p of pivots){
+      fixed[p.col]=free.every(j=>Math.abs(A[p.row][j])<=tol*10)
+    }
+    return fixed
+  }
+
+  function entityVariableIndices073(e,index){
+    if(!e||e.type==='text')return[];
+    const out=[];
+    for(const pid of entityPointIds(e)){
+      const q=index.point.get(pid);if(q)out.push(q.x,q.y)
+    }
+    if(e.type==='circle'&&index.circleRadius.has(e.id))out.push(index.circleRadius.get(e.id));
+    if(e.type==='arc'){
+      const q=index.arc.get(e.id);if(q)out.push(q.cx,q.cy,q.r)
+    }
+    return [...new Set(out)]
+  }
+
+  function updateDefinitionState073(force=false){
+    if(definitionState073.calculating||dragMove?.active)return definitionState073;
+    const sig=definitionSignature073();
+    if(!force&&sig===definitionState073.signature)return definitionState073;
+    definitionState073.calculating=true;
+    try{
+      const vars=solverVariables(),index=solverVariableIndex073(),n=vars.length;
+      let varFixed=Array(n).fill(false),rank=0;
+      if(n&&n<=180){
+        const x=vars.map(v=>v.get()),r=residualVector060(),J=numericJacobian(vars,x,r);
+        rank=matrixRank(J);
+        varFixed=rrefFixedVariables073(J,n)
+      }else if(n&&solverState.dof===0){
+        // Conservative large-sketch fallback: only certify entities if the entire sketch is fully defined.
+        varFixed=Array(n).fill(true);rank=n
+      }
+      const pointFixed=new Map();
+      for(const p of state.points){
+        const q=index.point.get(p.id);
+        pointFixed.set(p.id,!!q&&!!varFixed[q.x]&&!!varFixed[q.y])
+      }
+      const entityFull=new Map(),entityDOF=new Map();
+      for(const e of state.entities){
+        const ids=entityVariableIndices073(e,index);
+        if(e.type==='text'||!ids.length){entityFull.set(e.id,false);entityDOF.set(e.id,null);continue}
+        const free=ids.filter(i=>!varFixed[i]).length;
+        entityDOF.set(e.id,free);entityFull.set(e.id,free===0)
+      }
+      definitionState073={signature:sig,calculating:false,varFixed,pointFixed,entityFull,entityDOF,
+        globalDOF:n-rank,rank};
+    }catch(err){
+      console.warn('Definition analysis 0.73:',err);
+      definitionState073={...definitionState073,signature:sig,calculating:false}
+    }
+    return definitionState073
+  }
+
+  function invalidateDefinition073(){definitionState073.signature=''}
+
+  function isPointFullyDefined073(pid){
+    updateDefinitionState073();return definitionState073.pointFixed.get(pid)===true
+  }
+  function isEntityFullyDefined073(eid){
+    updateDefinitionState073();return definitionState073.entityFull.get(eid)===true
+  }
+  function descriptorVariableIndices073(desc){
+    const index=solverVariableIndex073(),out=[];
+    for(const pid of desc?.pointIds||[]){const q=index.point.get(pid);if(q)out.push(q.x,q.y)}
+    for(const eid of desc?.entityIds||[]){
+      const e=eBy(eid);if(e?.type==='circle'&&index.circleRadius.has(eid))out.push(index.circleRadius.get(eid));
+      if(e?.type==='arc'){const q=index.arc.get(eid);if(q)out.push(q.cx,q.cy,q.r)}
+    }
+    return [...new Set(out)]
+  }
+  function descriptorFullyDefined073(desc){
+    updateDefinitionState073();const ids=descriptorVariableIndices073(desc);
+    return !!ids.length&&ids.every(i=>definitionState073.varFixed[i])
+  }
+  function descriptorContainsLocked073(desc){
+    updateDefinitionState073();
+    return (desc?.entityIds||[]).some(isEntityFullyDefined073)||
+      (desc?.pointIds||[]).some(isPointFullyDefined073)
+  }
+
+  // Recompute after every solver pass. During an active drag we preserve the previous certificate.
+  const solve072baseFor073=solve;
+  solve=function(iter=30){
+    invalidateDefinition073();
+    const result=solve072baseFor073(iter);
+    if(!dragMove?.active)updateDefinitionState073(true);
+    return result
+  };
+
+  // A render caused only by selection or zoom reuses the cached rank analysis.
+  const render072baseFor073=render;
+  render=function(){
+    if(!dragMove?.active)updateDefinitionState073();
+    return render072baseFor073()
+  };
+
+  // Fully-defined vertices cannot be dragged.
+  const beginPointDrag072base=beginPointDrag;
+  beginPointDrag=function(ev,pid){
+    if(isPointFullyDefined073(pid)){
+      msg('Vértice completamente definido: elimina o modifica una cota/relación para poder moverlo.','warn');
+      return
+    }
+    return beginPointDrag072base(ev,pid)
+  };
+
+  // Fully-defined figures cannot be translated by their center handle.
+  const beginCenterDrag072base=beginCenterDrag;
+  beginCenterDrag=function(ev,desc){
+    if(descriptorFullyDefined073(desc)||descriptorContainsLocked073(desc)){
+      msg('Geometría completamente definida: el arrastre está bloqueado. Modifica sus cotas o relaciones para liberarla.','warn');
+      return
+    }
+    return beginCenterDrag072base(ev,desc)
+  };
+
+  // Selection feedback.
+  const renderSelection072baseFor073=renderSelection;
+  renderSelection=function(){
+    renderSelection072baseFor073();
+    const panel=$('selectionPanel');if(!panel)return;
+    let full=false,known=false,dof=null;
+    if(state.selection.kind==='point'&&state.selection.ids.length){
+      known=true;full=state.selection.ids.every(isPointFullyDefined073);dof=full?0:null
+    }else if(state.selection.kind==='entity'&&state.selection.ids.length){
+      const ids=state.selection.ids.filter(id=>eBy(id)?.type!=='text');
+      if(ids.length){known=true;full=ids.every(isEntityFullyDefined073);dof=ids.reduce((s,id)=>s+(definitionState073.entityDOF.get(id)||0),0)}
+    }
+    if(known){
+      const b=document.createElement('div');b.className='definition-badge'+(full?'':' under');
+      b.textContent=full?'✓ Completamente definido':(Number.isFinite(dof)?'Subdefinido · '+dof+' variables libres':'Subdefinido');
+      panel.appendChild(b)
+    }
+  };
+
+  // UI legend.
+  const buildUI072baseFor073=buildUI;
+  buildUI=function(){
+    buildUI072baseFor073();
+    const precision=$('leftPanel')?.querySelector('.section');
+    if(precision&&!$('definitionLegend073')){
+      const legend=document.createElement('div');legend.id='definitionLegend073';legend.className='definition-legend';
+      legend.innerHTML='<div class="definition-state"><span class="definition-swatch"></span><span>Subdefinido</span></div>'+
+        '<div class="definition-state"><span class="definition-swatch full"></span><span>Completamente definido</span></div>';
+      precision.appendChild(legend)
+    }
+    const dlg=$('helpDialog');
+    if(dlg){
+      const p=document.createElement('p');
+      p.innerHTML='<b>Definición 0.73:</b> una entidad pasa a verde solo cuando su posición, orientación y tamaño no tienen grados de libertad bajo las cotas y relaciones activas. Un círculo con diámetro pero centro libre sigue subdefinido. La geometría verde no se puede arrastrar desde sus vértices ni desde su asa central.';
+      dlg.appendChild(p)
+    }
+  };
+
+  const projectData072baseFor073=projectData;
+  projectData=function(){
+    const d=projectData072baseFor073();d.version='0.73';
+    d.engine={...(d.engine||{}),definitionColor:'green',definitionLock:'rank/Jacobian local DOF'};
+    return d
+  };
+
+
   // Tests exercise the exact application engine without an alternative implementation.
-  window.LaserSketch={state,get operations(){return operations},get baseModel(){return baseModel},get parameters(){return parameterDefs},get solverState(){return solverState},get slvsModule(){return slvsModule},geomData,newPoint,newLine,newCircle,newBezier,newConstraint,addRectangle,applyFillet,doFillet,doMirror,trimEntityAt,bezierControls,cubicAt,splitControls,bezierSamples,splitBezierEntity,boundsPoints,numberExpression,solve,constraintErrors,validateGeometry,exportSVG,exportDXF,exportKerfSVG,discoverProfiles,analyzeManufacturing,projectData,loadProject,pushHistory,finishOperation,rebuild,render,fitGeometry,undo,redo,setRectangleDimensions,rectangleGroupFromSelection,setLineAngle,entityParam,entityAt,exportCheck,addAdvancedRelation,createOffsetFeature,applyChamfer060,initSolveSpaceWasm,curveOffsetProfile,svgPathFromCurveOffset,offsetBezierAdaptive,convertSelectedTextToContours,outlineCommandsForText,createContoursFromCommands,setSlvsModuleForTest:m=>{slvsModule=m;updateEngineStatus()}};
+  window.LaserSketch={state,get operations(){return operations},get baseModel(){return baseModel},get parameters(){return parameterDefs},get solverState(){return solverState},get slvsModule(){return slvsModule},geomData,newPoint,newLine,newCircle,newBezier,newConstraint,addRectangle,applyFillet,doFillet,doMirror,trimEntityAt,bezierControls,cubicAt,splitControls,bezierSamples,splitBezierEntity,boundsPoints,numberExpression,solve,constraintErrors,validateGeometry,exportSVG,exportDXF,exportKerfSVG,discoverProfiles,analyzeManufacturing,projectData,loadProject,pushHistory,finishOperation,rebuild,render,fitGeometry,undo,redo,setRectangleDimensions,rectangleGroupFromSelection,setLineAngle,entityParam,entityAt,exportCheck,addAdvancedRelation,createOffsetFeature,applyChamfer060,initSolveSpaceWasm,curveOffsetProfile,svgPathFromCurveOffset,offsetBezierAdaptive,convertSelectedTextToContours,outlineCommandsForText,createContoursFromCommands,commandContours,stencilBridgeRects,clipSegmentByRects071,createSelectedTextStencil,completeRectangles072,selectionObjects072,alignSelection072,makeCentersCoincident072,copySelection072,pasteSelection072,bezierLineIntersections072,intersectionSnap072,updateDefinitionState073,isPointFullyDefined073,isEntityFullyDefined073,descriptorFullyDefined073,setSlvsModuleForTest:m=>{slvsModule=m;updateEngineStatus()}};
   buildUI();
   initSolveSpaceWasm();
-  try{storedDraft=localStorage.getItem('lasersketch-v070-draft')}catch(_){ }
+  try{storedDraft=localStorage.getItem('lasersketch-v073-draft')}catch(_){ }
   pushHistory();pending.label='Rectángulo base';const starter=addRectangle(0,0,80,50,'cut');annotateSemanticNames();solve();state.selection={kind:'entity',ids:starter.map(e=>e.id)};updatePanelToggles();render();state.history=[];
   requestAnimationFrame(()=>{fitGeometry();msg('Rectángulo 80 × 50 mm seleccionado. Edita sus medidas o comienza otro croquis.');if(!storedDraft){readyToSave=true;scheduleSave()}});
   if(storedDraft){const banner=document.createElement('div');banner.className='card';banner.style.marginBottom='12px';banner.innerHTML='<p class="small">Hay un croquis guardado automáticamente.</p><div class="row"><button id="recoverDraft" class="secondary">Recuperar</button><button id="ignoreDraft" class="secondary">Descartar</button></div>';$('rightPanel').prepend(banner);$('recoverDraft').onclick=()=>{try{loadProject(JSON.parse(storedDraft));banner.remove();readyToSave=true;scheduleSave();msg('Croquis recuperado.')}catch(err){msg('No se pudo recuperar: '+err.message,'bad')}};$('ignoreDraft').onclick=()=>{banner.remove();readyToSave=true;scheduleSave()}}
-  window.addEventListener('beforeunload',()=>{if(readyToSave)try{localStorage.setItem('lasersketch-v070-draft',JSON.stringify(projectData()))}catch(_){}});
+  window.addEventListener('beforeunload',()=>{if(readyToSave)try{localStorage.setItem('lasersketch-v073-draft',JSON.stringify(projectData()))}catch(_){}});
 
 })();
 </script>
