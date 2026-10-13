@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'nonce-LaserSketch085' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com; connect-src 'self' data: blob: https://cdn.jsdelivr.net https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:;">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LaserSketch CAD 0.85 — Croquis 2D para corte láser</title>
+<title>LaserSketch CAD 0.85.1 — Croquis 2D para corte láser</title>
 <style>
 
 :root{
@@ -1012,7 +1012,7 @@ label[for]{cursor:pointer}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brand"><span>LaserSketch</span><small>CAD</small><b>0.82</b></div>
+    <div class="brand"><span>LaserSketch</span><small>CAD</small><b>0.85.1</b></div>
 <div class="file-actions">    
     <button id="undoBtn" title="Deshacer · Ctrl+Z" aria-label="Deshacer">↶</button>
     <button id="redoBtn" title="Rehacer · Ctrl+Shift+Z" aria-label="Rehacer">↷</button>
@@ -8906,6 +8906,177 @@ label[for]{cursor:pointer}
     validateReplayOperation084,compactHistory084,midpointPoint084,rebuildIdIndexes084,cBy,
     setSlvsModuleForTest:m=>{slvsModule=m;updateEngineStatus()}
   };
+
+
+  // 0.85.1 — corrección de fuentes: sincronía entre panel, Inspector y tipografías web.
+  // La autorización de dependencias externas sigue siendo opt-in.
+  const fontStyles086=new Map();
+  let fontError086='';
+
+  function selectedTextForEditing086(){
+    const items=selE();
+    return state.tool==='select'&&items.length===1&&items[0].type==='text'?items[0]:null;
+  }
+
+  function refreshFontNotice086(){
+    const notice=$('textFontNotice086'),button=$('enableFonts086');
+    if(!notice||!button)return;
+    const allowed=onlineDepsEnabled080();
+    notice.textContent=!allowed
+      ? 'Google Fonts está desactivado por privacidad. Sin activarlo, todas las fuentes pueden verse iguales (fuente sustituta).'
+      : fontError086||'Google Fonts permitido. El diseño de cada letra se cargará al elegir la tipografía; para corte láser, convierte el texto a contornos.';
+    button.style.display=allowed?'none':'block';
+    const hint=$('textEditMode086');
+    if(hint)hint.textContent=selectedTextForEditing086()
+      ? 'Editando el texto seleccionado: cambiar la tipografía aquí también modifica el croquis.'
+      : 'Texto nuevo: elige la fuente y luego usa la herramienta Texto para colocarlo.';
+  }
+
+  function loadSelectedFont086(){
+    refreshFontNotice086();
+    if(!onlineDepsEnabled080())return;
+    const family=$('textFont')?.value||'Roboto';
+    const weight=Number($('textWeight')?.value)||400;
+    const key=family+'|'+weight;
+    if(fontStyles086.has(key))return;
+    const fam=encodeURIComponent(family).replace(/%20/g,'+');
+    const singleWeight=family==='Bebas Neue'||family==='Abril Fatface';
+    const suffix=singleWeight?'':':wght@'+weight;
+    const link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href='https://fonts.googleapis.com/css2?family='+fam+suffix+'&display=swap';
+    link.dataset.lasersketchFont=key;
+    fontStyles086.set(key,'loading');
+    link.onload=async()=>{
+      try{
+        if(document.fonts?.load)await document.fonts.load(weight+' 24px "'+family+'"','LASER');
+        fontStyles086.set(key,'ready');
+        if($('textFont')?.value===family){
+          fontError086='';
+          updateFontPreview();
+          refreshFontNotice086();
+        }
+      }catch(err){
+        fontStyles086.delete(key);
+        if($('textFont')?.value===family){
+          fontError086='La fuente no terminó de cargar. Verifica la conexión a Google Fonts.';
+          refreshFontNotice086();
+        }
+      }
+    };
+    link.onerror=()=>{
+      fontStyles086.delete(key);
+      if($('textFont')?.value===family){
+        fontError086='No se pudo descargar '+family+'. Revisa la conexión o el bloqueo de fuentes externas.';
+        refreshFontNotice086();
+      }
+    };
+    document.head.appendChild(link);
+  }
+
+  function syncTextControls086(){
+    const entity=selectedTextForEditing086();
+    if(entity){
+      const fields={
+        textContent:entity.text||'',
+        textFont:entity.font||'Roboto',
+        textSize:entity.size||10,
+        textRotation:entity.rotation||0,
+        textWeight:entity.weight||400,
+        textAlign:entity.align||'start',
+        textDisplayMode:entity.displayMode||'outline'
+      };
+      for(const [id,value] of Object.entries(fields)){
+        const control=$(id);
+        if(control&&control.value!==String(value)){
+          if(id==='textFont'&&!Array.from(control.options).some(o=>o.value===String(value))){
+            const custom=document.createElement('option');
+            custom.value=String(value);
+            custom.textContent=String(value)+' (proyecto)';
+            control.appendChild(custom);
+          }
+          control.value=String(value);
+        }
+      }
+      updateFontPreview();
+    }
+    refreshFontNotice086();
+    if(entity)loadSelectedFont086();
+  }
+
+  function updateTextFromToolbar086(id){
+    const entity=selectedTextForEditing086();
+    if(!entity)return;
+    const rules={
+      textContent:['text',v=>v.trim()||'Texto'],
+      textFont:['font',v=>v],
+      textSize:['size',v=>Math.max(.5,Number(v)||.5)],
+      textRotation:['rotation',v=>Number(v)||0],
+      textWeight:['weight',v=>Number(v)||400],
+      textAlign:['align',v=>v],
+      textDisplayMode:['displayMode',v=>v]
+    };
+    const rule=rules[id];
+    if(!rule)return;
+    const field=rule[0],value=rule[1]($(id).value);
+    if(entity[field]===value)return;
+    pushHistory();
+    entity[field]=value;
+    if(entity.bindings&&(field==='size'||field==='rotation'))delete entity.bindings[field];
+    render();
+    msg('Texto seleccionado actualizado: '+(field==='font'?'tipografía '+value:field)+'.');
+  }
+
+  function installFontEditor086(){
+    const chooser=$('textFont');
+    if(!chooser)return;
+    const preview=$('fontPreview');
+    if(preview&&!$('textEditMode086')){
+      const hint=document.createElement('p');
+      hint.id='textEditMode086';hint.className='small';hint.setAttribute('aria-live','polite');
+      preview.parentNode.insertBefore(hint,preview);
+      const notice=document.createElement('p');
+      notice.id='textFontNotice086';notice.className='quick-note';notice.setAttribute('aria-live','polite');
+      preview.insertAdjacentElement('afterend',notice);
+      const enable=document.createElement('button');
+      enable.id='enableFonts086';enable.type='button';enable.className='secondary';
+      enable.textContent='Habilitar Google Fonts y dependencias en línea';
+      enable.style.width='100%';enable.style.marginTop='6px';
+      notice.insertAdjacentElement('afterend',enable);
+      enable.onclick=()=>{
+        const consent=$('onlineDeps080');
+        if(consent&&!consent.checked){
+          consent.checked=true;
+          consent.dispatchEvent(new Event('change',{bubbles:true}));
+        }
+        refreshFontNotice086();
+        loadSelectedFont086();
+      };
+    }
+    for(const id of ['textFont','textWeight','textSize','textRotation','textAlign','textDisplayMode','textContent']){
+      const control=$(id);
+      if(!control)continue;
+      control.addEventListener('change',()=>{
+        updateTextFromToolbar086(id);
+        updateFontPreview();
+        if(id==='textFont'||id==='textWeight'||id==='textContent')loadSelectedFont086();
+      });
+    }
+    const permission=$('onlineDeps080');
+    if(permission)permission.addEventListener('change',()=>{
+      if(!permission.checked)fontError086='';
+      refreshFontNotice086();
+      if(permission.checked)loadSelectedFont086();
+    });
+    refreshFontNotice086();
+    loadSelectedFont086();
+  }
+
+  const buildUI085FontBase086=buildUI;
+  buildUI=function(){buildUI085FontBase086();installFontEditor086();};
+
+  const renderPropertyPanel085FontBase086=renderPropertyPanel;
+  renderPropertyPanel=function(){renderPropertyPanel085FontBase086();syncTextControls086();};
 
   AppController085.start();
 
